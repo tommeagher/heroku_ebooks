@@ -35,10 +35,10 @@ The bot does not run on every invocation. It runs in a pseudorandom fashion. At 
 By default, the bot ignores any tweets with URLs in them because those might just be headlines for articles and not text you've written.
 
 ```
-$markov_index = 2
+ORDER = 2
 ```
 
-The Markov index is a measure of associativity in the generated Markov chains. According to @harrisj, and I'll take his word for it, 1 is generally more incoherent and 3 is more lucid.
+The ORDER variable represents the Markov index, which is a measure of associativity in the generated Markov chains. According to @harrisj, and I'll take his word for it, 1 is generally more incoherent and 3 is more lucid.
 
 ## Debugging
 
