@@ -1,8 +1,8 @@
 import random
-import markov
-import twitter
 import re
 import sys
+import twitter
+import markov
 from local_settings import *
 
 def connect():
@@ -17,6 +17,8 @@ def filter_tweet(tweet):
     tweet.text = re.sub(r'(\#|@|(h\/t)|(http))\S+','',tweet.text) #Take out URLs, hashtags, hts, etc.
     tweet.text = re.sub(r'\n','', tweet.text) #take out new lines.
     tweet.text = re.sub(r'\"|\(|\)', '', tweet.text) #take out quotes.
+    tweet.text = re.sub(r'\xe9', 'e', tweet.text) #take out accented e
+    tweet.text = re.sub(r'\&amp;', '&', tweet.text) #clean up escaped html ampersands
     return tweet.text
                                                     
 def grab_tweets(api, max_id=None):
@@ -50,7 +52,12 @@ if __name__=="__main__":
             sys.exit()
         mine = markov.MarkovChainer(order)
         for tweet in source_tweets:
+            if re.search('([\.\!\?\"\']$)', tweet):
+                pass
+            else:
+                tweet+="."
             mine.add_text(tweet)
+            
         for x in range(0,10):
             ebook_tweet = mine.generate_sentence()
 
@@ -61,13 +68,19 @@ if __name__=="__main__":
            print ebook_tweet
     
         #if a tweet is very short, this will randomly add a second sentence to it.
-        if ebook_tweet != None and len(ebook_tweet) < 40 and random.randint(0,5) == 0: 
-            print "Short tweet. Adding another sentence randomly"
-            newer_tweet = mine.generate_sentence()
-            if newer_tweet != None:
-                ebook_tweet += " " + mine.generate_sentence()
-            else:
-                ebook_tweet = ebook_tweet
+        if ebook_tweet != None and len(ebook_tweet) < 40:
+            rando = random.randint(0,7)
+            if rando == 0: 
+                print "Short tweet. Adding another sentence randomly"
+                newer_tweet = mine.generate_sentence()
+                if newer_tweet != None:
+                    ebook_tweet += " " + mine.generate_sentence()
+                else:
+                    ebook_tweet = ebook_tweet
+            elif rando == 1:
+                #say something crazy/prophetic in all caps
+                print "ALL THE THINGS"
+                ebook_tweet = ebook_tweet.upper()
 
         #throw out tweets that match anything from the source account.
         if ebook_tweet != None and len(ebook_tweet) < 110:
