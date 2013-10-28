@@ -8,3 +8,4 @@ SOURCE_ACCOUNT = "" #The Twitter handle of the account that you'll generate twee
 ODDS = 8 #How often do you want this to run? 1/8 times?
 ORDER = 2 #how closely do you want this to hew to sensical? 1 is low and 3 is high.
 DEBUG = True #Set this to False to start Tweeting live
+TEST_SOURCE = "" #The name of a text file of a string-ified list for testing. To avoid unnecessarily hitting Twitter API.
