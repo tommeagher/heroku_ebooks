@@ -6,13 +6,13 @@ This is a basic Python port of [@harrisj's](https://twitter.com/harrisj) [iron_e
 
 1. Clone this repo
 2. Create a Twitter account that you will post to.
-3. Sign into (https://dev.twitter.com/apps) with the same login and create an application.
+3. Sign into https://dev.twitter.com/apps with the same login and create an application.
 4. Make a copy of the `local_settings_example.py` file and name it `local_settings.py`
 5. Take the consumer key (and secret) and access token (and secret) from your Twiter application and paste them into the appropriate spots in `local_settings.py`.
 6. In `local_settings.py`, be sure to add the handle of the Twitter user you want your _ebooks account to be based on. To make your tweets go live, change the `DEBUG` variable to `False`.
 7. Create an account at Heroku, if you don't already have one. [Install the Heroku toolbelt](https://devcenter.heroku.com/articles/quickstart#step-2-install-the-heroku-toolbelt) and set your Heroku login on the command line.
 8. Type the command `heroku create` to generate the _ebooks Python app on the platform that you can schedule.
-9. The only Python requirement for this script is the (python-twitter)[https://github.com/bear/python-twitter], the `pip install` of which is handled by Heroku automatically.
+9. The only Python requirement for this script is [python-twitter](https://github.com/bear/python-twitter), the `pip install` of which is handled by Heroku automatically.
 9. `git commit -am 'updated the local_settings.py'`
 10. `git push heroku master`
 11. Test your upload by typing `heroku run worker`. You should either get a response that says "3, no, sorry, not this time" or a message with the body of your post. If you get the latter, check your _ebooks Twitter account to see if it worked.
