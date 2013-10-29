@@ -6,7 +6,7 @@ This is a basic Python port of [@harrisj's](https://twitter.com/harrisj) [iron_e
 
 1. Clone this repo
 2. Create a Twitter account that you will post to.
-3. Sign into https://dev.twitter.com/apps with the same login and create an application.
+3. Sign into https://dev.twitter.com/apps with the same login and create an application. Make sure that your application has read and write permissions to make POST requests.
 4. Make a copy of the `local_settings_example.py` file and name it `local_settings.py`
 5. Take the consumer key (and secret) and access token (and secret) from your Twiter application and paste them into the appropriate spots in `local_settings.py`.
 6. In `local_settings.py`, be sure to add the handle of the Twitter user you want your _ebooks account to be based on. To make your tweets go live, change the `DEBUG` variable to `False`.
