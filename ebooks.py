@@ -39,23 +39,25 @@ if __name__=="__main__":
         guess = 0
 
     if guess == 0:
-        if DEBUG==True:
+        if STATIC_TEST==True:
             file = TEST_SOURCE
+            print ">>> Generating from {0}".format(file)
             string_list = open(file).readlines()
             for item in string_list:
                 source_tweets = item.split(",")    
         else:
-            user=SOURCE_ACCOUNT   
             source_tweets = []
-            api=connect()
-            max_id=None
-            for x in range(17)[1:]:
-                source_tweets_iter, max_id = grab_tweets(api,max_id)
-                source_tweets += source_tweets_iter
-            print "{0} tweets found".format(len(source_tweets))
-            if len(source_tweets) == 0:
-                print "Error fetching tweets from Twitter. Aborting."
-                sys.exit()
+            for handle in SOURCE_ACCOUNTS:
+                user=handle
+                api=connect()
+                max_id=None
+                for x in range(17)[1:]:
+                    source_tweets_iter, max_id = grab_tweets(api,max_id)
+                    source_tweets += source_tweets_iter
+                print "{0} tweets found in {1}".format(len(source_tweets), handle)
+                if len(source_tweets) == 0:
+                    print "Error fetching tweets from Twitter. Aborting."
+                    sys.exit()
         mine = markov.MarkovChainer(order)
         for tweet in source_tweets:
             if re.search('([\.\!\?\"\']$)', tweet):
