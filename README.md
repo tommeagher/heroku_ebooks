@@ -42,15 +42,18 @@ The ORDER variable represents the Markov index, which is a measure of associativ
 
 ## Debugging
 
-You can also turn off the publication of tweets and skip the random number generation if you want to test the script to debug it.
+If you want to test the script or to debug the tweet generation, you can skip the random number generation and not publish the resulting tweets to Twitter.
 
-First, adjust the DEBUG variable in `local_settings.py`.
+First, adjust the `DEBUG` variable in `local_settings.py`.
 
 ```
 DEBUG = True 
 ```
 
 After that, commit the change and `git push heroku master`. Then run the command `heroku run worker` on the command line and watch what happens.
+
+If you want to avoid hitting the Twitter API and instead want to use a static text file, you can do that. First, create a text file containing a Python list of quote-wrapped tweets. Then set the `STATIC_TEST` variable to `True`. Finally, specify the name of text file using the `TEST_SOURCE` variable in `local_settings.py`
+
 
 ## Credit
 As I said, this is based almost entirely on [@harrisj's](https://twitter.com/harrisj) [iron_ebooks](https://github.com/harrisj/iron_ebooks/). He created it in Ruby, and I wanted to port it to Python. All the credit goes to him.
