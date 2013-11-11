@@ -3,6 +3,7 @@ import re
 import sys
 import twitter
 import markov
+from htmlentitydefs import name2codepoint as n2c
 from local_settings import *
 
 def connect():
@@ -12,14 +13,38 @@ def connect():
                           access_token_secret=MY_ACCESS_TOKEN_SECRET)
     return api
 
+def entity(text):
+    if text[:2] == "&#":
+        try:
+            if text[:3] == "&#x":
+                return unichr(int(text[3:-1], 16))
+            else:
+                return unichr(int(text[2:-1]))
+        except ValueError:
+            pass
+    else:
+        guess = text[1:-1]
+        numero = n2c[guess]
+        try:
+            text = unichr(numero)
+        except KeyError:
+            pass    
+    return text
+
 def filter_tweet(tweet):
     tweet.text = re.sub(r'\b(RT|MT) .+','',tweet.text) #take out anything after RT or MT
     tweet.text = re.sub(r'(\#|@|(h\/t)|(http))\S+','',tweet.text) #Take out URLs, hashtags, hts, etc.
     tweet.text = re.sub(r'\n','', tweet.text) #take out new lines.
     tweet.text = re.sub(r'\"|\(|\)', '', tweet.text) #take out quotes.
+    htmlsents = re.findall(r'&\w+;', tweet.text)
+    if len(htmlsents) > 0 :
+        for item in htmlsents:
+            tweet.text = re.sub(item, entity(item), tweet.text)    
     tweet.text = re.sub(r'\xe9', 'e', tweet.text) #take out accented e
-    tweet.text = re.sub(r'\&amp;', '&', tweet.text) #clean up escaped html ampersands
+#    tweet.text = re.sub(r'\&amp;', '&', tweet.text) #clean up escaped html ampersands
     return tweet.text
+                     
+                     
                                                     
 def grab_tweets(api, max_id=None):
     source_tweets=[]
@@ -101,7 +126,7 @@ if __name__=="__main__":
                           
             if DEBUG == False:
                 status = api.PostUpdate(ebook_tweet)
-                print status.text
+                print status.text.encode('utf-8')
             else:
                 print ebook_tweet
 
