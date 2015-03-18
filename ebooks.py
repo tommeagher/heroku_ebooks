@@ -41,6 +41,7 @@ def filter_tweet(tweet):
         for item in htmlsents:
             tweet.text = re.sub(item, entity(item), tweet.text)    
     tweet.text = re.sub(r'\xe9', 'e', tweet.text) #take out accented e
+#    tweet.text = re.sub(r'\&amp;', '&', tweet.text) #clean up escaped html ampersands
     return tweet.text
                      
                      
