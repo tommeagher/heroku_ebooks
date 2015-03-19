@@ -58,3 +58,5 @@ If you want to avoid hitting the Twitter API and instead want to use a static te
 ## Credit
 As I said, this is based almost entirely on [@harrisj's](https://twitter.com/harrisj) [iron_ebooks](https://github.com/harrisj/iron_ebooks/). He created it in Ruby, and I wanted to port it to Python. All the credit goes to him.
 As a result, all of the blame for clunky implementation in Python fall on me. If you see ways to improve the code, please fork it and send a pull request, or file an issue for me and I'll address it.
+
+Hi, it's MrPSB here!  I've fiddled with this and broken it and fixed it and probably broken it again.  Credit for the bits that work to everyone who isn't me.
