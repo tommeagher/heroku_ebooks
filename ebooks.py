@@ -5,7 +5,7 @@ import twitter
 import markov
 
 from htmlentitydefs import name2codepoint as n2c
-from local_settings_TEST import *
+from local_settings import *
 
 # Edited for running direct on me Ras Pi
 # Instead of giving up on a failed tweet retries until success
@@ -79,14 +79,16 @@ if __name__=="__main__":
         guess = 0
 
     if guess == 0:
-        if STATIC_TEST==True:
-            file = TEST_SOURCE
+        if TEXT_INPUT == True:
+            file = TEXT_SOURCE
             source_tweets=[]
             print ">>> Generating from {0}".format(file)
             raw_tweets = list(open(file))
             for twaterator in raw_tweets[:]:
                 source_tweets.append(filter_twat(twaterator.decode('UTF-8')))
-        
+            if DEBUG == False:
+                api = connect()
+                    
         else:
             source_tweets = []
             for handle in SOURCE_ACCOUNTS:
