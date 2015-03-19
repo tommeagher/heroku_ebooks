@@ -3,8 +3,12 @@ import re
 import sys
 import twitter
 import markov
+
 from htmlentitydefs import name2codepoint as n2c
-from local_settings import *
+from local_settings_TEST import *
+
+# Edited for running direct on me Ras Pi
+# Instead of giving up on a failed tweet retries until success
 
 def connect():
     api = twitter.Api(consumer_key=MY_CONSUMER_KEY,
@@ -42,8 +46,7 @@ def filter_tweet(tweet):
             tweet.text = re.sub(item, entity(item), tweet.text)    
     tweet.text = re.sub(r'\xe9', 'e', tweet.text) #take out accented e
     return tweet.text
-                     
-                     
+                                
                                                     
 def grab_tweets(api, max_id=None):
     source_tweets=[]
@@ -68,7 +71,7 @@ if __name__=="__main__":
             print ">>> Generating from {0}".format(file)
             string_list = open(file).readlines()
             for item in string_list:
-                source_tweets = item.split("\n")    
+                source_tweets = item.split(",")    
         else:
             source_tweets = []
             for handle in SOURCE_ACCOUNTS:
@@ -82,56 +85,71 @@ if __name__=="__main__":
                 if len(source_tweets) == 0:
                     print "Error fetching tweets from Twitter. Aborting."
                     sys.exit()
+
+        
+        success = False
+
+        # this section does the actual building of tweet
+        # changed it to try again on failure, default was to just give up
+
         mine = markov.MarkovChainer(order)
-        for tweet in source_tweets:
-            if re.search('([\.\!\?\"\']$)', tweet):
-                pass
-            else:
-                tweet+="."
-            mine.add_text(tweet)
+
+        while success == False:
             
-        for x in range(0,10):
-            ebook_tweet = mine.generate_sentence()
+            ebook_tweet = ""  # this clears out any previous unsuccessful attempt
 
-        #randomly drop the last word, as Horse_ebooks appears to do.
-        if random.randint(0,4) == 0 and re.search(r'(in|to|from|for|with|by|our|of|your|around|under|beyond)\s\w+$', ebook_tweet) != None: 
-           print "Losing last word randomly"
-           ebook_tweet = re.sub(r'\s\w+.$','',ebook_tweet) 
-           print ebook_tweet
-    
-        #if a tweet is very short, this will randomly add a second sentence to it.
-        if ebook_tweet != None and len(ebook_tweet) < 40:
-            rando = random.randint(0,10)
-            if rando == 0 or rando == 7: 
-                print "Short tweet. Adding another sentence randomly"
-                newer_tweet = mine.generate_sentence()
-                if newer_tweet != None:
-                    ebook_tweet += " " + mine.generate_sentence()
-                else:
-                    ebook_tweet = ebook_tweet
-            elif rando == 1:
-                #say something crazy/prophetic in all caps
-                print "ALL THE THINGS"
-                ebook_tweet = ebook_tweet.upper()
-
-        #throw out tweets that match anything from the source account.
-        if ebook_tweet != None and len(ebook_tweet) < 110:
             for tweet in source_tweets:
-                if ebook_tweet[:-1] not in tweet:
-                    continue
-                else: 
-                    print "TOO SIMILAR: " + ebook_tweet
-                    sys.exit()
-                          
-            if DEBUG == False:
-                status = api.PostUpdate(ebook_tweet)
-                print status.text.encode('utf-8')
-            else:
-                print ebook_tweet
+                if re.search('([\.\!\?\"\']$)', tweet):
+                    pass
+                else:
+                    tweet+="."
+                mine.add_text(tweet)
+            
+            #for x in range(0,10):
 
-        elif ebook_tweet == None:
-            print "Tweet is empty, sorry."
-        else:
-            print "TOO LONG: " + ebook_tweet
+            ebook_tweet = mine.generate_sentence()
+   
+            #if a tweet is very short, this will randomly add a second sentence to it.
+            if ebook_tweet != None and len(ebook_tweet) < 40:
+                rando = random.randint(0,10)
+                if rando == 0 or rando == 7: 
+                    print "Short tweet. Adding another sentence randomly"
+                    newer_tweet = mine.generate_sentence()
+                    if newer_tweet != None:
+                        ebook_tweet += " " + mine.generate_sentence()
+                    else:
+                        ebook_tweet = ebook_tweet
+                elif rando == 1:
+                    #say something crazy/prophetic in all caps
+                    print "ALL THE THINGS"
+                    ebook_tweet = ebook_tweet.upper()
+
+            #throw out tweets that match anything from the source account.
+            if ebook_tweet != None and len(ebook_tweet) < 120:
+                success = True
+                for tweet in source_tweets:
+                    if ebook_tweet[:-1] not in tweet:
+                        continue
+                    else: 
+                        print "TOO SIMILAR: " + ebook_tweet
+                        success = False
+            elif ebook_tweet == None:
+                print "I done goofed, there's nothing in the tweet"
+                success = False
+            elif len(ebook_tweet) >= 120:
+                print "That's too long, whoopsypoops"
+                success = False
+            else:
+                print "I have no idea what I'm doing"
+                success = False
+            
+        # Couldn't find anything wrong with the tweet so here goes
+            if success == True:
+                if DEBUG == False:
+                    status = api.PostUpdate(ebook_tweet)
+                    print status.text.encode('utf-8')         
+                else:
+                    print "SUCCESS: " + ebook_tweet
+                
     else:
-        print str(guess) + " No, sorry, not this time." #message if the random number fails.
+        print "This time I'm not doing a tweet, so there" #message if the random number fails.
