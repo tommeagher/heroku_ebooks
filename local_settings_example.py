@@ -25,3 +25,7 @@ TEXT_SOURCE = ""
 
 #The name of the account you're tweeting to.
 TWEET_ACCOUNT = "" 
+
+#When the bot replies does it reply to everyone or just to original
+#Tweet that mentioned it
+REPLY_TO_ALL = False
