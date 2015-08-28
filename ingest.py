@@ -67,5 +67,4 @@ if __name__=="__main__":
 # Do something to stick object "mine" onto disk for later use
 
     pickle.dump( mine , open("botbrain.p", "wb" ))
-    
-
+    pickle.dump( source_tweets, open("source_tweets.p","wb"))
