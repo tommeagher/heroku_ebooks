@@ -1,6 +1,9 @@
-# Heroku_ebooks
+# mrpsb_ebooks
 
-This is a basic Python port of [@harrisj's](https://twitter.com/harrisj) [iron_ebooks](https://github.com/harrisj/iron_ebooks/) Ruby script. Using Heroku's scheduler, you can post to an _ebooks Twitter account based on the corpus of an existing Twitter at pseudorandom intervals. Currently, it is the magic behind [@adriennelaf_ebx](http://www.twitter.com/adriennelaf_ebx) and [@stevebuttry_ebx](http://www.twitter.com/stevebuttry_ebx).
+Based on [tommeagher's](https://github.com/tommeagher) Python port of [@harrisj's](https://twitter.com/harrisj) [iron_ebooks](https://github.com/harrisj/iron_ebooks/) Ruby script. 
+I've adapted it to run on my Raspberry Pi by having cron call it, and picking up tweets from a text file built from a twitter archive dump instead of live from Twitter
+
+Currently used for [@MrPSB_ebooks](https://twitter.com/mrpsb_ebooks)
 
 ## Setup
 
@@ -10,16 +13,10 @@ This is a basic Python port of [@harrisj's](https://twitter.com/harrisj) [iron_e
 4. Make a copy of the `local_settings_example.py` file and name it `local_settings.py`
 5. Take the consumer key (and secret) and access token (and secret) from your Twiter application and paste them into the appropriate spots in `local_settings.py`.
 6. In `local_settings.py`, be sure to add the handle of the Twitter user you want your _ebooks account to be based on. To make your tweets go live, change the `DEBUG` variable to `False`.
-7. Create an account at Heroku, if you don't already have one. [Install the Heroku toolbelt](https://devcenter.heroku.com/articles/quickstart#step-2-install-the-heroku-toolbelt) and set your Heroku login on the command line.
-8. Type the command `heroku create` to generate the _ebooks Python app on the platform that you can schedule.
-9. The only Python requirement for this script is [python-twitter](https://github.com/bear/python-twitter), the `pip install` of which is handled by Heroku automatically.
-9. `git commit -am 'updated the local_settings.py'`
-10. `git push heroku master`
-11. Test your upload by typing `heroku run worker`. You should either get a response that says "3, no, sorry, not this time" or a message with the body of your post. If you get the latter, check your _ebooks Twitter account to see if it worked.
-12. Now it's time to configure the scheduler. `heroku addons:add scheduler:standard`
-13. Once that runs, type `heroku addons:open scheduler`. This will open up a browser window where you can adjust the time interval for the script to run. I recommend setting it at one hour.
-14. Sit back and enjoy the fruits of your labor.
-
+7. Put a UTF-8 encoded text file of your tweets (or whatever), in the same directory as the script and run ingest.py
+8. Run ebooks.py whenever you want to spam twitter with a load of nonsense
+9. The only Python requirement for this script is [python-twitter](https://github.com/bear/python-twitter) - this can be picked up using apt-get on raspian.
+10. Flood Twitter with your nonsense for no reason
 
 ## Configuring
 
@@ -30,15 +27,14 @@ ODDS = 8
 ```
 
 The bot does not run on every invocation. It runs in a pseudorandom fashion. At the beginning of each time the script fires, `guess = random.choice(range(ODDS))`. If `guess == 0`, then it proceeds. If your `ODDS = 8`, it should run one out of every 8 times, more or less. You can override it to make it more or less frequent. To make it run every time, you can set it to 0.
-
-
 By default, the bot ignores any tweets with URLs in them because those might just be headlines for articles and not text you've written.
 
 ```
 ORDER = 2
 ```
 
-The ORDER variable represents the Markov index, which is a measure of associativity in the generated Markov chains. According to @harrisj, and I'll take his word for it, 1 is generally more incoherent and 3 is more lucid.
+The ORDER variable should represent the Markov index, which is a measure of associativity in the generated Markov chains. 
+What it currently does, and I'm too dim to fix, is break if it's set to 1 and bring back very if its set to 3.
 
 ## Debugging
 
@@ -50,13 +46,7 @@ First, adjust the `DEBUG` variable in `local_settings.py`.
 DEBUG = True 
 ```
 
-After that, commit the change and `git push heroku master`. Then run the command `heroku run worker` on the command line and watch what happens.
-
-If you want to avoid hitting the Twitter API and instead want to use a static text file, you can do that. First, create a text file containing a Python list of quote-wrapped tweets. Then set the `STATIC_TEST` variable to `True`. Finally, specify the name of text file using the `TEST_SOURCE` variable in `local_settings.py`
-
 
 ## Credit
-As I said, this is based almost entirely on [@harrisj's](https://twitter.com/harrisj) [iron_ebooks](https://github.com/harrisj/iron_ebooks/). He created it in Ruby, and I wanted to port it to Python. All the credit goes to him.
-As a result, all of the blame for clunky implementation in Python fall on me. If you see ways to improve the code, please fork it and send a pull request, or file an issue for me and I'll address it.
-
-Hi, it's MrPSB here!  I've fiddled with this and broken it and fixed it and probably broken it again.  Credit for the bits that work to everyone who isn't me.
+This is very much a tweaked (with all the grace and skill of a man smashing things with a hammer) version of tommeagher's port of harrisj's work.  
+If it falls over, it's more than likely my fault, so probably best check the original repos I've forked this from and pick up some competent code :)
