@@ -13,7 +13,7 @@ Currently used for [@MrPSB_ebooks](https://twitter.com/mrpsb_ebooks)
 4. Make a copy of the `local_settings_example.py` file and name it `local_settings.py`
 5. Take the consumer key (and secret) and access token (and secret) from your Twiter application and paste them into the appropriate spots in `local_settings.py`.
 6. In `local_settings.py`, be sure to add the handle of the Twitter user you want your _ebooks account to be based on. To make your tweets go live, change the `DEBUG` variable to `False`.
-7. Put a UTF-8 encoded text file of your tweets (or whatever), in the same directory as the script and run ingest.py
+7. Put a UTF-8 encoded text file of your tweets (or whatever), in the same directory as the script.  Point TEXT_SOURCE in `local_settings.py` at it, and run `ingest.py`.
 8. Run ebooks.py whenever you want to spam twitter with a load of nonsense
 9. The only Python requirement for this script is [python-twitter](https://github.com/bear/python-twitter) - this can be picked up using apt-get on raspian.
 10. Flood Twitter with your nonsense for no reason
