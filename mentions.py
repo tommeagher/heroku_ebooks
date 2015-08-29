@@ -67,7 +67,7 @@ if __name__=="__main__":
     # See if there's a lastmention stored, otherwise grab all you can
 
     try:
-        lastmention = pickle.load(open("lastmention.p","rb"))
+        lastmention = pickle.load(open(BRAIN_LOCATION + "lastmention.p","rb"))
     except:
         lastmention = 0
     
@@ -77,11 +77,11 @@ if __name__=="__main__":
     if len(mentions)>0:
         # Update saved lastmention
         lastmention = mentions[0].id
-        pickle.dump(lastmention, open("lastmention.p","wb"))
+        pickle.dump(lastmention, open(BRAIN_LOCATION + "lastmention.p","wb"))
 
         # If there's something to reply to,
         # we'd best load the stuff to do that
-        mine = pickle.load(open( "botbrain.p" , "rb" ))
+        mine = pickle.load(open(BRAIN_LOCATION+ "botbrain.p" , "rb" ))
  
         for x in range(0,len(mentions)):
 

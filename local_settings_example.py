@@ -29,3 +29,9 @@ TWEET_ACCOUNT = ""
 #When the bot replies does it reply to everyone or just to original
 #Tweet that mentioned it
 REPLY_TO_ALL = False
+
+# Running from the command line is fine
+# But it needs to know where stuff is if you're using cron
+# or something
+
+INSTALL_LOCATION = ""
