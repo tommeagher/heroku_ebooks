@@ -16,7 +16,7 @@ This is a basic Python port of [@harrisj's](https://twitter.com/harrisj) [iron_e
 9. `git commit -am 'updated the local_settings.py'`
 10. `git push heroku master`
 11. Test your upload by typing `heroku run worker`. You should either get a response that says "3, no, sorry, not this time" or a message with the body of your post. If you get the latter, check your _ebooks Twitter account to see if it worked.
-12. Now it's time to configure the scheduler. `heroku addons:add scheduler:standard`
+12. Now it's time to configure the scheduler. `heroku addons:create scheduler:standard`
 13. Once that runs, type `heroku addons:open scheduler`. This will open up a browser window where you can adjust the time interval for the script to run. I recommend setting it at one hour.
 14. Sit back and enjoy the fruits of your labor.
 
