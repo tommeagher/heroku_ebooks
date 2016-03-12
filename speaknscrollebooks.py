@@ -3,10 +3,12 @@ import re
 import sys
 import twitter
 import markov
+import pyttsx
 import cPickle as pickle
 
 from htmlentitydefs import name2codepoint as n2c
 from local_settings import *
+from sense_hat import SenseHat
 
 # Edited for running direct on Ras Pi using cron
 # Instead of giving up on a failed tweet retries until success
@@ -20,7 +22,9 @@ def connect():
     return api
 
 if __name__=="__main__":
-        
+
+    hat = SenseHat()
+    
     if DEBUG==False:
         guess = random.choice(range(ODDS))
     else:
@@ -77,7 +81,14 @@ if __name__=="__main__":
             if success == True:
                 if DEBUG == False:
                     status = api.PostUpdate(ebook_tweet)
-                    print status.text.encode('utf-8')         
+                    s = status.text.encode('utf-8')
+	            print s
+                    spk = pyttsx.init()
+                    spk.setProperty('rate',100)
+		    spk.setProperty('voice','english_rp')
+	            spk.say(s)
+                    spk.runAndWait()
+                    hat.show_message(s)		
                 else:
                     print "SUCCESS: " + ebook_tweet
                 

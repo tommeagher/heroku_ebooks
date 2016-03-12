@@ -3,6 +3,8 @@ import re
 import sys
 import twitter
 import markov
+import pyttsx
+import sys
 import cPickle as pickle
 
 from htmlentitydefs import name2codepoint as n2c
@@ -11,6 +13,13 @@ from local_settings import *
 # Edited for running direct on Ras Pi using cron
 # Instead of giving up on a failed tweet retries until success
 # Altered to bring in pre-prepared brain from disk
+
+
+try:
+    if sys.argv[1] == "JFDI":
+	ODDS = 1
+except:
+    pass
 
 def connect():
     api = twitter.Api(consumer_key=MY_CONSUMER_KEY,
@@ -77,7 +86,14 @@ if __name__=="__main__":
             if success == True:
                 if DEBUG == False:
                     status = api.PostUpdate(ebook_tweet)
-                    print status.text.encode('utf-8')         
+                    s = status.text.encode('utf-8')
+	            print s
+                    spk = pyttsx.init()
+                    spk.setProperty('rate',100)
+		    spk.setProperty('voice','english_rp')
+	            spk.say(s)
+                    spk.runAndWait()
+                    			
                 else:
                     print "SUCCESS: " + ebook_tweet
                 

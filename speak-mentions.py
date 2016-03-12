@@ -3,6 +3,7 @@ import re
 import sys
 import twitter
 import markov
+import pyttsx
 import cPickle as pickle
 
 from htmlentitydefs import name2codepoint as n2c
@@ -66,6 +67,11 @@ if __name__=="__main__":
 
     # See if there's a lastmention stored, otherwise grab all you can
 
+    spk = pyttsx.init()
+    spk.setProperty('rate',100)
+    spk.setProperty('voice','english_rp')
+    spk.runAndWait()
+    
     try:
         lastmention = pickle.load(open(BRAIN_LOCATION + "lastmention.p","rb"))
     except:
@@ -103,3 +109,8 @@ if __name__=="__main__":
             
             print "@" + mentions[x].user.screen_name.encode('UTF-8') + " said: " + mentions[x].text.encode('UTF-8')
             print "Replied: " + reply.text.encode('UTF-8')
+
+            spk.say(reply.text.encode('UTF-8'))
+
+        spk.runAndWait()
+            
