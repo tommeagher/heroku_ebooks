@@ -16,6 +16,8 @@ Currently used for [@MrPSB_ebooks](https://twitter.com/mrpsb_ebooks)
 7. Put a UTF-8 encoded text file of your tweets (or whatever), in the same directory as the script and run ingest.py
 8. Run ebooks.py whenever you want to spam twitter with a load of nonsense
 9. The only Python requirement for this script is [python-twitter](https://github.com/bear/python-twitter) - this can be picked up using apt-get on raspian.
+10. To use the speaking version you will need pyttsx (pip install pyttsx)
+11. For pictures you will need imgurpython (pip install imgurpython)
 10. Flood Twitter with your nonsense for no reason
 
 ## Configuring
@@ -34,7 +36,7 @@ ORDER = 2
 ```
 
 The ORDER variable should represent the Markov index, which is a measure of associativity in the generated Markov chains. 
-What it currently does, and I'm too dim to fix, is break if it's set to 1 and bring back very if its set to 3.
+What it currently does, and I'm too dim to fix, is break if it's set to 1 and bring back very little if it's set to 3.
 
 ## Debugging
 
