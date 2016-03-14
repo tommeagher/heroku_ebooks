@@ -73,7 +73,7 @@ if __name__=="__main__":
     spk.runAndWait()
     
     try:
-        lastmention = pickle.load(open(BRAIN_PATH + "lastmention.p","rb"))
+        lastmention = pickle.load(open(BRAIN_LOCATION + "lastmention.p","rb"))
     except:
         lastmention = 0
     
@@ -83,11 +83,11 @@ if __name__=="__main__":
     if len(mentions)>0:
         # Update saved lastmention
         lastmention = mentions[0].id
-        pickle.dump(lastmention, open(BRAIN_PATH + "lastmention.p","wb"))
+        pickle.dump(lastmention, open(BRAIN_LOCATION + "lastmention.p","wb"))
 
         # If there's something to reply to,
         # we'd best load the stuff to do that
-        mine = markov_2.MarkovChainer(2,BRAIN_LOCATION)
+        mine = markov_2.MarkovChainer(2,BRAIN_PATH)
  
         for x in range(0,len(mentions)):
 

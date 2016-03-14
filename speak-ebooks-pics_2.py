@@ -115,8 +115,8 @@ if __name__=="__main__":
                         print status.text.encode('UTF-8')
                     else:
                         status = api.PostUpdate(ebook_tweet)
-                        print status.text.encode('utf-8')
-
+                        s = status.text.encode('utf-8')
+                        print s
                         spk = pyttsx.init()
                         spk.setProperty('rate',100)
                         spk.setProperty('voice','english_rp')
