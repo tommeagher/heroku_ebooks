@@ -7,7 +7,6 @@ import pyttsx
 import cPickle as pickle
 import urllib
 
-from htmlentitydefs import name2codepoint as n2c
 from local_settings import *
 from imgurpython import ImgurClient
 

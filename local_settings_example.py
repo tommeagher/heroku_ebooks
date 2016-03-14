@@ -36,4 +36,5 @@ REPLY_TO_ALL = True
 # But it needs to know where stuff is if you're using cron
 # or something
 
-BRAIN_LOCATION = ""
+BRAIN_LOCATION = "./"
+BRAIN_PATH = "./brain.db"

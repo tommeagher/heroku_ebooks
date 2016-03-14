@@ -1,6 +1,4 @@
 import random
-import re
-import sys
 import twitter
 import markov
 import pyttsx
@@ -8,8 +6,6 @@ import sys
 import cPickle as pickle
 import urllib
 
-
-from htmlentitydefs import name2codepoint as n2c
 from local_settings import *
 from imgurpython import ImgurClient
 
