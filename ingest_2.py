@@ -1,11 +1,12 @@
 import re
-import markov
-#import markov_2
+import markov_2
+import sqlite3
 
 from htmlentitydefs import name2codepoint as n2c
 from local_settings import *
 
-# Takes text file, builds the Markov object and sticks it on disk for future use
+# Builds Markov database from text file by cleaning up text
+# And adding each line to the DB
 
 def entity(text):
     if text[:2] == "&#":
@@ -43,10 +44,19 @@ if __name__=="__main__":
     # Source text file
     file = TEXT_SOURCE
 
+    db = sqlite3.connect(BRAIN_LOCATION)
+    brain = db.cursor()
+
+    try:
+        brain.execute("DROP TABLE tweets")
+        brain.execute("CREATE TABLE tweets(tweet)")
+    except:
+        brain.execute("CREATE TABLE tweets(tweet)")
+
     # Initialise list for tweets
     source_tweets=[]
 
-    # A lovely message for the console
+    print "Using brain" + BRAIN_LOCATION
     print ">>> Generating from {0}".format(file)
 
     # create a list from the source file
@@ -59,7 +69,8 @@ if __name__=="__main__":
 
     for twat in raw_tweets[:]:
         source_tweets.append(filter_tweet(twat.decode('UTF-8')))
-        
+        brain.execute("INSERT INTO tweets VALUES (?)", (filter_tweet(twat.decode('UTF-8')),))
+
     # something in Markov is broken so only order 2 works properly
     # Maybe one day I'll know enough to fix the bug
     # One day...
@@ -69,9 +80,14 @@ if __name__=="__main__":
 
     # create Markov object
 
-    mine = markov.MarkovChainer(2) # change "2" to "order" to use order from config file
-    #mine = markov_2.MarkovChainer(2,BRAIN_LOCATION) # change "2" to "order" to use order from config file
-    #mine.init_db()
+    #mine = markov.MarkovChainer(2) # change "2" to "order" to use order from config file
+
+    db.commit()
+    db.close()
+
+    mine = markov_2.MarkovChainer(2,BRAIN_LOCATION) # change "2" to "order" to use order from config file
+
+    mine.init_db()
 
     for tweet in source_tweets:
         # if the tweet has punctuation in it, then great
@@ -83,7 +99,5 @@ if __name__=="__main__":
             tweet+="."
         mine.add_text(tweet)
 
-    # Do something to stick objects "mine" and "source_tweets" onto disk for later use
-
-     pickle.dump( mine , open("botbrain.p", "wb" ))
-     pickle.dump( source_tweets, open("source_tweets.p","wb"))
+    mine.commit_db()
+    mine.compact_db()
