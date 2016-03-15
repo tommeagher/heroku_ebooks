@@ -74,7 +74,7 @@ if __name__=="__main__":
                     imgs = imgur.gallery_random()
                 
                 for img in imgs:
-                    if img.is_album == False and img.size < 5000000 and img.nsfw == False:
+                    if img.is_album == False and img.size < 3000000 and img.nsfw == False:
                         grabfile = urllib.URLopener()
                         print "Grabbing file " + img.link
                         imgfile = grabfile.retrieve(img.link)

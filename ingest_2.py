@@ -44,7 +44,7 @@ if __name__=="__main__":
     # Source text file
     file = TEXT_SOURCE
 
-    db = sqlite3.connect(BRAIN_LOCATION)
+    db = sqlite3.connect(BRAIN_PATH)
     brain = db.cursor()
 
     try:
@@ -56,7 +56,7 @@ if __name__=="__main__":
     # Initialise list for tweets
     source_tweets=[]
 
-    print "Using brain" + BRAIN_LOCATION
+    print "Using brain" + BRAIN_PATH
     print ">>> Generating from {0}".format(file)
 
     # create a list from the source file
