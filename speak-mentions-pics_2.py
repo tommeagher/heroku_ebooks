@@ -87,7 +87,11 @@ if __name__=="__main__":
 
         # If there's something to reply to,
         # we'd best load the stuff to do that
+<<<<<<< HEAD:speak-mentions-pics_2.py
         mine = markov_2.MarkovChainer(2,BRAIN_PATH)
+=======
+        mine = pickle.load(open(BRAIN_LOCATION+ "botbrain.p" , "rb" ))
+>>>>>>> master:mentions.py
  
         for x in range(0,len(mentions)):
 

@@ -30,11 +30,19 @@ TWEET_ACCOUNT = "MrPSB_ebooks"
 
 #When the bot replies does it reply to everyone or just to original
 #Tweet that mentioned it
+<<<<<<< HEAD
 REPLY_TO_ALL = True
+=======
+REPLY_TO_ALL = False
+>>>>>>> master
 
 # Running from the command line is fine
 # But it needs to know where stuff is if you're using cron
 # or something
 
+<<<<<<< HEAD
 BRAIN_LOCATION = "./"
 BRAIN_PATH = "./brain.db"
+=======
+INSTALL_LOCATION = ""
+>>>>>>> master
