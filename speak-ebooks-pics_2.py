@@ -65,14 +65,20 @@ if __name__=="__main__":
                 # one then grab a random one
               
                 imgur = imgurconnect()
-                imgs = imgur.gallery_search('',{'q_any': ebook_tweet})
 
+                imgs = imgur.gallery_search('',{'q_all': ebook_tweet})
                 print "Images found: " + str(len(imgs))
-                
+
                 if len(imgs) == 0:
-                    print "No images found for search, going random"
+                    print "No images found for all search, search ANY"
+                    imgs = imgur.gallery_search('',{'q_any': ebook_tweet})
+                    print "Images found: " + str(len(imgs))
+
+                if len(imgs) == 0:
+                    print "No images found for all search, going random"
                     imgs = imgur.gallery_random()
-                
+                    print "Images found: " + str(len(imgs))
+
                 for img in imgs:
                     if img.is_album == False and img.size < 3000000 and img.nsfw == False:
                         grabfile = urllib.URLopener()
