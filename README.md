@@ -38,7 +38,7 @@ By default, the bot ignores any tweets with URLs in them because those might jus
 ORDER = 2
 ```
 
-The ORDER variable represents the Markov index, which is a measure of associativity in the generated Markov chains. According to @harrisj, and I'll take his word for it, 1 is generally more incoherent and 3 is more lucid.
+The ORDER variable represents the Markov index, which is a measure of associativity in the generated Markov chains. 2 is generally more incoherent and 3 or 4 is more lucid. I tend to stick with 2.
 
 ## Debugging
 
