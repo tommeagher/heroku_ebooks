@@ -120,6 +120,19 @@ if __name__=="__main__":
                 print "ALL THE THINGS"
                 ebook_tweet = ebook_tweet.upper()
 
+        # strip out any via @handle or says @handle
+        # via or says should always be second to last word, let's grab that
+        # TODO: this only works if another tweet doesn't get added
+        # solution: run this check before and after length addition
+        last_space = ebook_tweet.rindex(' ')
+        previous_space = ebook_tweet.rindex(' ', 0, last_space)
+        second_last_word = ebook_tweet[previous_space+1:last_space].lower()
+
+        if second_last_word == 'via' or second_last_word == 'says':
+            # strip the credit
+            ebook_tweet = ebook_tweet[:previous_space]
+
+
         #throw out tweets that match anything from the source account.
         if ebook_tweet != None and len(ebook_tweet) < 110:
             for tweet in source_tweets:
