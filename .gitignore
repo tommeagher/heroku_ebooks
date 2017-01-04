@@ -1,2 +1,5 @@
 *.pyc
 .git
+local_settings.py
+local_settings_TEST.py
+*.txt
