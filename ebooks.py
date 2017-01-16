@@ -36,6 +36,7 @@ def filter_tweet(tweet):
     tweet.text = re.sub(r'(\#|@|(h\/t)|(http))\S+','',tweet.text) #Take out URLs, hashtags, hts, etc.
     tweet.text = re.sub(r'\n','', tweet.text) #take out new lines.
     tweet.text = re.sub(r'\"|\(|\)', '', tweet.text) #take out quotes.
+    tweet.text = re.sub(r'\s+\(?(via|says)\s@\w+\)?', '', tweet.text) # remove attribution
     htmlsents = re.findall(r'&\w+;', tweet.text)
     if len(htmlsents) > 0 :
         for item in htmlsents:
