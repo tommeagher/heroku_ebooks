@@ -56,6 +56,23 @@ def grab_tweets(api, max_id=None):
             source_tweets.append(tweet.text)
     return source_tweets, max_id
 
+def remove_credit(ebook_tweet):
+    # strip out any via @handle or says @handle
+    # via or says should always be second to last word, let's grab that
+    last_space = ebook_tweet.rindex(' ')
+    try:
+        previous_space = ebook_tweet.rindex(' ', 0, last_space)
+    except ValueError:
+        # two-word tweet? nothing to do!
+        return ebook_tweet
+    # get the second-last word from the space indexes
+    second_last_word = ebook_tweet[previous_space+1:last_space].lower()
+
+    if second_last_word == 'via' or second_last_word == 'says':
+        # strip the credit
+        ebook_tweet = ebook_tweet[:previous_space]
+    return ebook_tweet
+
 if __name__=="__main__":
     order = ORDER
     if DEBUG==False:
@@ -105,6 +122,8 @@ if __name__=="__main__":
            print "Losing last word randomly"
            ebook_tweet = re.sub(r'\s\w+.$','',ebook_tweet) 
            print ebook_tweet
+        # remove any RT credis
+        ebook_tweet = remove_credit(ebook_tweet)
     
         #if a tweet is very short, this will randomly add a second sentence to it.
         if ebook_tweet != None and len(ebook_tweet) < 40:
@@ -120,6 +139,8 @@ if __name__=="__main__":
                 #say something crazy/prophetic in all caps
                 print "ALL THE THINGS"
                 ebook_tweet = ebook_tweet.upper()
+            # remove RT credit again, it may have gotten re-added
+            ebook_tweet = remove_credit(ebook_tweet)
 
         #throw out tweets that match anything from the source account.
         if ebook_tweet != None and len(ebook_tweet) < 110:
