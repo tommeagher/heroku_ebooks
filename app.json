@@ -1,0 +1,16 @@
+{
+  "name": "heroku_ebooks",
+  "description": "bot https://medium.com/science-friday-footnotes/how-to-make-a-twitter-bot-in-under-an-hour-259597558acf#.lwyuhqwsp",
+  "scripts": {
+  },
+  "env": {
+  },
+  "formation": {
+  },
+  "addons": [
+
+  ],
+  "buildpacks": [
+
+  ]
+}
