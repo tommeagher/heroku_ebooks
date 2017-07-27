@@ -4,9 +4,9 @@ import markov_2
 import pyttsx
 import sys
 import urllib
+import images
 
 from local_settings import *
-from imgurpython import ImgurClient
 
 # Edited for running direct on Ras Pi using cron
 # Instead of giving up on a failed tweet retries until success
@@ -14,7 +14,7 @@ from imgurpython import ImgurClient
 
 try:
     if sys.argv[1] == "JFDI":
-	ODDS = 1
+        ODDS = 1
 except:
     pass
 
@@ -24,10 +24,6 @@ def connect():
                           access_token_key=MY_ACCESS_TOKEN_KEY,
                           access_token_secret=MY_ACCESS_TOKEN_SECRET)
     return api
-
-def imgurconnect():
-    imgur = ImgurClient(IMGUR_CLIENT_ID, IMGUR_CLIENT_SECRET)
-    return imgur
 
 if __name__=="__main__":
         
@@ -58,34 +54,45 @@ if __name__=="__main__":
             # if a tweet is very short, this uses it to search imgur with the
             # tweet as query and post the tweet with the image
             
-            if ebook_tweet != None and len(ebook_tweet) < 40:
-                print "I'm going to post a disgusting image: " + ebook_tweet
+            if ebook_tweet != None and len(ebook_tweet) < 80:
 
-                # connect to imgur, search for an image, if you don't find
-                # one then grab a random one
-              
-                imgur = imgurconnect()
-                imgs = imgur.gallery_search('',{'q_any': ebook_tweet})
+                if mine.duplicate_tweet(ebook_tweet) == False:
 
-                print "Images found: " + str(len(imgs))
-                
-                if len(imgs) == 0:
-                    print "No images found for search, going random"
-                    imgs = imgur.gallery_random()
-                
-                for img in imgs:
-                    if img.is_album == False and img.size < 3000000 and img.nsfw == False:
-                        grabfile = urllib.URLopener()
-                        print "Grabbing file " + img.link
-                        imgfile = grabfile.retrieve(img.link)
-                        break
-                        
-                success = True
-                imgtweet = True
+                    print "I'm going to post a disgusting image: " + ebook_tweet
+                    # connect to Google Image Search, search for an image, if you don't find
+                    # one then don't bother
+
+                    img = images.grabImage(images.searchCleanup(ebook_tweet))
+
+                    if len(img) > 0:
+                    # Quite a few sites don't like being hit for direct download
+                    # With HTTPlib so just give up for now and drop the image
+                    # Further investigation needed!                        
+			try:
+			    print "Image Found " + img
+                            grabfile = urllib.URLopener()
+                            print "Grabbing file " + img
+                            imgfile = grabfile.retrieve(img)
+
+                            success = True
+                            imgtweet = True
+                        except:
+                            print "This site doesn't like me touching it"
+                            success = True
+                            imgtweet = False
+
+                    else:
+                        print "No Image Found"
+                        success = True
+                        imgtweet = False
+
+                else:
+                    ebook_tweet += " " + mine.generate_sentence()
+                    imgtweet = False
 
             if imgtweet == False:
                 #throw out tweets that match anything from the source account.
-                if ebook_tweet != None and len(ebook_tweet) < 120:
+                if ebook_tweet != None and len(ebook_tweet) < 138:
 
                     print "Success!"
                     success = True
@@ -111,8 +118,21 @@ if __name__=="__main__":
             if success == True:
                 if DEBUG == False:
                     if imgtweet == True:
-                        status = api.PostMedia(ebook_tweet, open(imgfile[0],"rb"))
+                        # status = api.PostMedia(ebook_tweet, open(imgfile[0],"rb"))
+			randodando = random.choice(range(25))
+                        # DEBUGMODELOL
+                        # randodando = 1			
+			if randodando == 0:
+                            print "OH SHIT YOU ROLLED A 10 THINGS ARE GOING TO GET SEXY"
+			    status = api.PostMedia("We've all been there", open(imgfile[0],"rb"))
+			#elif randodando == 1:
+		        #    print "IT'S SATIRE TIME BABY"
+                        #    status = api.PostMedia("", open(imgfile[0],"rb"))
+			else:
+	                    status = api.PostMedia(ebook_tweet, open(imgfile[0],"rb"))
+						
                         print status.text.encode('UTF-8')
+
                     else:
                         status = api.PostUpdate(ebook_tweet)
                         s = status.text.encode('utf-8')

@@ -1,9 +1,9 @@
 
 import twitter
 import markov_2
-import pyttsx
 import cPickle as pickle
 import urllib
+import images
 
 from local_settings import *
 from imgurpython import ImgurClient
@@ -27,7 +27,9 @@ def imgurconnect():
 
     return imgur
 
-def replytweetgen(mine, usernames, maxchar):                           
+
+def replytweetgen(mine, usernames, maxchar):
+
     success = False
     
     # this section does the actual building of reply tweet
@@ -67,11 +69,6 @@ if __name__=="__main__":
 
     # See if there's a lastmention stored, otherwise grab all you can
 
-    spk = pyttsx.init()
-    spk.setProperty('rate',100)
-    spk.setProperty('voice','english_rp')
-    spk.runAndWait()
-    
     try:
         lastmention = pickle.load(open(BRAIN_LOCATION + "lastmention.p","rb"))
     except:
@@ -105,37 +102,26 @@ if __name__=="__main__":
                 for usr in range(0,len(mentions[x].user_mentions)):
                     users.append(mentions[x].user_mentions[usr].screen_name)
 
+            reply = []
             reply = replytweetgen(mine, users, 120)
 
-            if len(reply[0]) <= 60:
+            if len(reply[0]) <= 40:
 
                 print "OK IT'S TIME FOR A PICTURE!"
                 print "Searching for: " + reply[1]
             
-                imgur = imgurconnect()
-                imgs = imgur.gallery_search('',{"q_any": reply[1]})
+                img = images.grabImage(reply[1])
 
-                print "Images found: " + str(len(imgs))
-                
-                if len(imgs) == 0:
-                    print "No images found for search, going random"
-                    imgs = imgur.gallery_random()
-                
-                for img in imgs:
-                    if img.is_album == False and img.size < 3000000 and img.nsfw == False:
-                        grabfile = urllib.URLopener()
-                        print "Grabbing file " + img.link
-                        imgfile = grabfile.retrieve(img.link)
-                        break
-
-                reply = api.PostMedia(reply[0],open(imgfile[0],"rb"),in_reply_to_status_id=mentions[x].id)
+                try:
+                    grabfile = urllib.URLopener()
+                    imgfile = grabfile.retrieve(img)
+                    reply = api.PostMedia(reply[0],open(imgfile[0],"rb"),in_reply_to_status_id=mentions[x].id)
+                except:
+                    # Just in case the image grabber fails to find and image or whatever
+                    reply = api.PostUpdate(reply[0],in_reply_to_status_id=mentions[x].id)
                 
             else:
                 reply = api.PostUpdate(reply[0],in_reply_to_status_id=mentions[x].id)
                  
             print "@" + mentions[x].user.screen_name.encode('UTF-8') + " said: " + mentions[x].text.encode('UTF-8')
             print "Replied: " + reply.text.encode('UTF-8')
-
-            spk.say(reply.text.encode('UTF-8'))
-            spk.runAndWait()
-            
