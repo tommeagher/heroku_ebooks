@@ -57,10 +57,9 @@ def grab_tweets(api, max_id=None):
 
 if __name__=="__main__":
     order = ORDER
-    if DEBUG==False:
-        guess = random.choice(range(ODDS))
-    else:
-        guess = 0
+    guess = 0
+    if ODDS and not DEBUG:
+        guess = random.randint(0, ODDS - 1)
 
     if guess == 0:
         if STATIC_TEST==True:
