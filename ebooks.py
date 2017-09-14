@@ -75,11 +75,8 @@ if __name__=="__main__":
                 handle_stats = api.GetUser(screen_name=user)
                 status_count = handle_stats.statuses_count
                 max_id=None
-                if status_count<3200:
-                    my_range = (status_count/200) + 1
-                else:
-                    my_range = 17
-                for x in range(my_range)[1:]:
+                my_range = min(17, (status_count/200) + 1)
+                for x in range(1, my_range):
                     source_tweets_iter, max_id = grab_tweets(api,max_id)
                     source_tweets += source_tweets_iter
                 print "{0} tweets found in {1}".format(len(source_tweets), handle)
