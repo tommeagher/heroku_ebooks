@@ -28,7 +28,7 @@ def entity(text):
         try:
             text = unichr(numero)
         except KeyError:
-            pass    
+            pass
     return text
 
 def filter_tweet(tweet):
@@ -40,12 +40,12 @@ def filter_tweet(tweet):
     htmlsents = re.findall(r'&\w+;', tweet.text)
     if len(htmlsents) > 0 :
         for item in htmlsents:
-            tweet.text = re.sub(item, entity(item), tweet.text)    
+            tweet.text = re.sub(item, entity(item), tweet.text)
     tweet.text = re.sub(r'\xe9', 'e', tweet.text) #take out accented e
     return tweet.text
-                     
-                     
-                                                    
+
+
+
 def grab_tweets(api, max_id=None):
     source_tweets=[]
     user_tweets = api.GetUserTimeline(screen_name=user, count=200, max_id=max_id, include_rts=True, trim_user=True, exclude_replies=True)
@@ -69,7 +69,7 @@ if __name__=="__main__":
             print ">>> Generating from {0}".format(file)
             string_list = open(file).readlines()
             for item in string_list:
-                source_tweets = item.split(",")    
+                source_tweets = item.split(",")
         else:
             source_tweets = []
             for handle in SOURCE_ACCOUNTS:
@@ -96,20 +96,20 @@ if __name__=="__main__":
             else:
                 tweet+="."
             mine.add_text(tweet)
-            
+
         for x in range(0,10):
             ebook_tweet = mine.generate_sentence()
 
         #randomly drop the last word, as Horse_ebooks appears to do.
-        if random.randint(0,4) == 0 and re.search(r'(in|to|from|for|with|by|our|of|your|around|under|beyond)\s\w+$', ebook_tweet) != None: 
+        if random.randint(0,4) == 0 and re.search(r'(in|to|from|for|with|by|our|of|your|around|under|beyond)\s\w+$', ebook_tweet) != None:
            print "Losing last word randomly"
-           ebook_tweet = re.sub(r'\s\w+.$','',ebook_tweet) 
+           ebook_tweet = re.sub(r'\s\w+.$','',ebook_tweet)
            print ebook_tweet
-    
+
         #if a tweet is very short, this will randomly add a second sentence to it.
         if ebook_tweet != None and len(ebook_tweet) < 40:
             rando = random.randint(0,10)
-            if rando == 0 or rando == 7: 
+            if rando == 0 or rando == 7:
                 print "Short tweet. Adding another sentence randomly"
                 newer_tweet = mine.generate_sentence()
                 if newer_tweet != None:
@@ -126,10 +126,10 @@ if __name__=="__main__":
             for tweet in source_tweets:
                 if ebook_tweet[:-1] not in tweet:
                     continue
-                else: 
+                else:
                     print "TOO SIMILAR: " + ebook_tweet
                     sys.exit()
-                          
+
             if DEBUG == False:
                 status = api.PostUpdate(ebook_tweet)
                 print status.text.encode('utf-8')

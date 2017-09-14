@@ -14,10 +14,10 @@ class MarkovChainer(object):
         buf = []
         if len(words) > self.order:
             words.append(terminator)
-            self.beginnings.append(words[0:self.order])    
+            self.beginnings.append(words[0:self.order])
         else:
             pass
-        
+
         for word in words:
             buf.append(word)
             if len(buf) == self.order + 1:
@@ -80,7 +80,7 @@ class MarkovChainer(object):
             next_words = random.choice(arr)
             return next_words
         except:
-            return None        
+            return None
 
 if __name__ == "__main__":
     print "Try running ebooks.py first"
