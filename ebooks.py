@@ -7,11 +7,10 @@ from htmlentitydefs import name2codepoint as n2c
 from local_settings import *
 
 def connect():
-    api = twitter.Api(consumer_key=MY_CONSUMER_KEY,
-                          consumer_secret=MY_CONSUMER_SECRET,
-                          access_token_key=MY_ACCESS_TOKEN_KEY,
-                          access_token_secret=MY_ACCESS_TOKEN_SECRET)
-    return api
+    return twitter.Api(consumer_key=MY_CONSUMER_KEY,
+                       consumer_secret=MY_CONSUMER_SECRET,
+                       access_token_key=MY_ACCESS_TOKEN_KEY,
+                       access_token_secret=MY_ACCESS_TOKEN_SECRET)
 
 def entity(text):
     if text[:2] == "&#":
