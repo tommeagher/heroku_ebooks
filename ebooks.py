@@ -34,14 +34,13 @@ def entity(text):
 def filter_tweet(tweet):
     tweet.text = re.sub(r'\b(RT|MT) .+','',tweet.text) #take out anything after RT or MT
     tweet.text = re.sub(r'(\#|@|(h\/t)|(http))\S+','',tweet.text) #Take out URLs, hashtags, hts, etc.
-    tweet.text = re.sub(r'\n','', tweet.text) #take out new lines.
+    tweet.text = tweet.text.replace('\n', '') #take out new lines.
     tweet.text = re.sub(r'\"|\(|\)', '', tweet.text) #take out quotes.
     tweet.text = re.sub(r'\s+\(?(via|says)\s@\w+\)?', '', tweet.text) # remove attribution
     htmlsents = re.findall(r'&\w+;', tweet.text)
-    if len(htmlsents) > 0 :
-        for item in htmlsents:
-            tweet.text = re.sub(item, entity(item), tweet.text)
-    tweet.text = re.sub(r'\xe9', 'e', tweet.text) #take out accented e
+    for item in htmlsents:
+        tweet.text = tweet.text.replace(item, entity(item))
+    tweet.text = tweet.text.replace('\xe9', 'e') #take out accented e
     return tweet.text
 
 
