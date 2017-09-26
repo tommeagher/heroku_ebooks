@@ -52,6 +52,8 @@ def grab_tweets(api, max_id=None):
     max_id = user_tweets[len(user_tweets)-1].id-1
     for tweet in user_tweets:
         tweet.text = filter_tweet(tweet)
+        if re.search(SOURCE_EXCLUDE, tweet.text):
+            continue
         if len(tweet.text) != 0:
             source_tweets.append(tweet.text)
     return source_tweets, max_id
