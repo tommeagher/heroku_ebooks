@@ -4,12 +4,12 @@ import sys
 import twitter
 import markov
 try:
-	# Python 2
-	from htmlentitydefs import name2codepoint as n2c
+    # Python 3
+    from html.entities import name2codepoint as n2c
 except ImportError:
-	# Python 3
-	from html.entities import name2codepoint as n2c
-	unichr = chr
+    # Python 2
+    from htmlentitydefs import name2codepoint as n2c
+    chr = unichr
 from local_settings import *
 
 def connect():
@@ -23,16 +23,16 @@ def entity(text):
     if text[:2] == "&#":
         try:
             if text[:3] == "&#x":
-                return unichr(int(text[3:-1], 16))
+                return chr(int(text[3:-1], 16))
             else:
-                return unichr(int(text[2:-1]))
+                return chr(int(text[2:-1]))
         except ValueError:
             pass
     else:
         guess = text[1:-1]
         numero = n2c[guess]
         try:
-            text = unichr(numero)
+            text = chr(numero)
         except KeyError:
             pass    
     return text
