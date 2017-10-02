@@ -1,2 +1,4 @@
 *.pyc
 .git
+/.idea
+__pycache__

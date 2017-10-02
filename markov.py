@@ -83,4 +83,4 @@ class MarkovChainer(object):
             return None        
 
 if __name__ == "__main__":
-    print "Try running ebooks.py first"
+    print("Try running ebooks.py first")
