@@ -3,6 +3,8 @@ import re
 import sys
 import twitter
 import markov
+from bs4 import BeautifulSoup
+from urllib.request import urlopen
 try:
     # Python 3
     from html.entities import name2codepoint as n2c
@@ -50,7 +52,15 @@ def filter_tweet(tweet):
     tweet.text = re.sub(r'\xe9', 'e', tweet.text) #take out accented e
     return tweet.text
                      
-                     
+def scrape_page(src_url, span_name):
+    print(">>> Generating from {0}".format(src_url))
+    page = urlopen(src_url)
+    soup = BeautifulSoup(page, 'html.parser')
+    spans = soup.find_all('span', attrs={'class': span_name})
+    titles = []
+    for span in spans:
+        titles.append(str(span.string))
+    return(titles)
                                                     
 def grab_tweets(api, max_id=None):
     source_tweets=[]
@@ -72,22 +82,24 @@ if __name__=="__main__":
         guess = 0
 
     if guess == 0:
+        api=connect()
         if STATIC_TEST==True:
             file = TEST_SOURCE
             print(">>> Generating from {0}".format(file))
             string_list = open(file).readlines()
             for item in string_list:
-                source_tweets = item.split(",")    
+                source_tweets = item.split(",")
+        elif SCRAPE_URL==True:
+            source_tweets = scrape_page(SRC_URL, SPAN_NAME)
         else:
             source_tweets = []
             for handle in SOURCE_ACCOUNTS:
                 user=handle
-                api=connect()
                 handle_stats = api.GetUser(screen_name=user)
                 status_count = handle_stats.statuses_count
                 max_id=None
                 if status_count<3200:
-                    my_range = (status_count/200) + 1
+                    my_range = int((status_count/200) + 1)
                 else:
                     my_range = 17
                 for x in range(my_range)[1:]:
