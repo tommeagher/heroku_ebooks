@@ -87,7 +87,7 @@ if __name__=="__main__":
                 status_count = handle_stats.statuses_count
                 max_id=None
                 if status_count<3200:
-                    my_range = (status_count/200) + 1
+                    my_range = int((status_count/200) + 1)
                 else:
                     my_range = 17
                 for x in range(my_range)[1:]:
