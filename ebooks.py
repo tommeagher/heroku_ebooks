@@ -4,13 +4,14 @@ import sys
 import twitter
 import markov
 from bs4 import BeautifulSoup
-from urllib.request import urlopen
 try:
     # Python 3
     from html.entities import name2codepoint as n2c
+    from urllib.request import urlopen
 except ImportError:
     # Python 2
     from htmlentitydefs import name2codepoint as n2c
+    from urllib2 import urlopen
     chr = unichr
 from local_settings import *
 
