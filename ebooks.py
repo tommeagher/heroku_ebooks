@@ -52,15 +52,16 @@ def filter_tweet(tweet):
     tweet.text = re.sub(r'\xe9', 'e', tweet.text) #take out accented e
     return tweet.text
                      
-def scrape_page(src_url, span_name):
-    print(">>> Generating from {0}".format(src_url))
-    page = urlopen(src_url)
-    soup = BeautifulSoup(page, 'html.parser')
-    spans = soup.find_all('span', attrs={'class': span_name})
-    titles = []
-    for span in spans:
-        titles.append(str(span.string))
-    return(titles)
+def scrape_page(src_url, web_context, web_attributes):
+    tweets = []
+    for i in range(len(src_url)):
+        print(">>> Scraping {0}".format(src_url[i]))
+        page = urlopen(src_url[i])
+        soup = BeautifulSoup(page, 'html.parser')
+        hits = soup.find_all(web_context[i], attrs=web_attributes[i])
+        for hit in hits:
+            tweets.append(str(hit.text).strip())
+    return(tweets)
                                                     
 def grab_tweets(api, max_id=None):
     source_tweets=[]
@@ -90,7 +91,7 @@ if __name__=="__main__":
             for item in string_list:
                 source_tweets = item.split(",")
         elif SCRAPE_URL==True:
-            source_tweets = scrape_page(SRC_URL, SPAN_NAME)
+            source_tweets = scrape_page(SRC_URL, WEB_CONTEXT, WEB_ATTRIBUTES)
         else:
             source_tweets = []
             for handle in SOURCE_ACCOUNTS:
