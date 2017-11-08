@@ -67,7 +67,9 @@ def scrape_page(src_url, web_context, web_attributes):
         soup = BeautifulSoup(page, 'html.parser')
         hits = soup.find_all(web_context[i], attrs=web_attributes[i])
         for hit in hits:
-            tweets.append(str(hit.text).strip())
+            tweet = str(hit.text).strip()
+            if len(tweet) >= 0:
+                tweets.append(tweet)
     return(tweets)
                                                     
 def grab_tweets(api, max_id=None):
@@ -91,16 +93,17 @@ if __name__=="__main__":
 
     if guess == 0:
         api=connect()
+        source_tweets = []
         if STATIC_TEST==True:
             file = TEST_SOURCE
             print(">>> Generating from {0}".format(file))
             string_list = open(file).readlines()
             for item in string_list:
-                source_tweets = item.split(",")
-        elif SCRAPE_URL==True:
-            source_tweets = scrape_page(SRC_URL, WEB_CONTEXT, WEB_ATTRIBUTES)
-        else:
-            source_tweets = []
+                source_tweets += item.split(",")
+        if SCRAPE_URL==True:
+            source_tweets += scrape_page(SRC_URL, WEB_CONTEXT, WEB_ATTRIBUTES)
+        if len(SOURCE_ACCOUNTS[0]) > 0:
+            twitter_tweets =  []
             for handle in SOURCE_ACCOUNTS:
                 user=handle
                 handle_stats = api.GetUser(screen_name=user)
@@ -111,12 +114,14 @@ if __name__=="__main__":
                 else:
                     my_range = 17
                 for x in range(my_range)[1:]:
-                    source_tweets_iter, max_id = grab_tweets(api,max_id)
-                    source_tweets += source_tweets_iter
-                print("{0} tweets found in {1}".format(len(source_tweets), handle))
-                if len(source_tweets) == 0:
+                    twitter_tweets_iter, max_id = grab_tweets(api,max_id)
+                    twitter_tweets += twitter_tweets_iter
+                print("{0} tweets found in {1}".format(len(twitter_tweets), handle))
+                if len(twitter_tweets) == 0:
                     print("Error fetching tweets from Twitter. Aborting.")
                     sys.exit()
+                else:
+                    source_tweets += twitter_tweets
         mine = markov.MarkovChainer(order)
         for tweet in source_tweets:
             if re.search('([\.\!\?\"\']$)', tweet):
