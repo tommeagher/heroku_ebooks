@@ -1,23 +1,24 @@
 import random
 import re
 
+
 class MarkovChainer(object):
     def __init__(self, order):
-        self.order=order
+        self.order = order
         self.beginnings = []
         self.freq = {}
 
-    #pass a string with a terminator to the function to add it to the markov lists.
+    # pass a string with a terminator to the function to add it to the markov lists.
     def add_sentence(self, string, terminator):
         data = "".join(string)
         words = data.split()
         buf = []
         if len(words) > self.order:
             words.append(terminator)
-            self.beginnings.append(words[0:self.order])    
+            self.beginnings.append(words[0:self.order])
         else:
             pass
-        
+
         for word in words:
             buf.append(word)
             if len(buf) == self.order + 1:
@@ -44,21 +45,21 @@ class MarkovChainer(object):
                 else:
                     sentence = piece
 
-    #Generate the goofy sentences that become your tweet.
+    # Generate the goofy sentences that become your tweet.
     def generate_sentence(self):
         res = random.choice(self.beginnings)
         res = res[:]
-        if len(res)==self.order:
+        if len(res) == self.order:
             nw = True
-            while nw != None:
+            while nw is not None:
                 restup = (res[-2], res[-1])
                 try:
                     nw = self.next_word_for(restup)
-                    if nw != None:
+                    if nw is not None:
                         res.append(nw)
                     else:
                         continue
-                except:
+                except Exception:
                     nw = False
             new_res = res[0:-2]
             if new_res[0].istitle() or new_res[0].isupper():
@@ -79,8 +80,9 @@ class MarkovChainer(object):
             arr = self.freq[words]
             next_words = random.choice(arr)
             return next_words
-        except:
-            return None        
+        except Exception:
+            return None
+
 
 if __name__ == "__main__":
     print("Try running ebooks.py first")
