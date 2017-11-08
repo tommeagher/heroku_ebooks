@@ -58,12 +58,12 @@ def scrape_page(src_url, web_context, web_attributes):
     for i in range(len(src_url)):
         print(">>> Scraping {0}".format(src_url[i]))
         try: 
-          page = urlopen(src_url[i])
+            page = urlopen(src_url[i])
         except Exception:
-          import traceback
-          print(">>> Error scraping {0}:".format(src_url[i]))
-          print(traceback.format_exc())
-          continue
+            import traceback
+            print(">>> Error scraping {0}:".format(src_url[i]))
+            print(traceback.format_exc())
+            continue
         soup = BeautifulSoup(page, 'html.parser')
         hits = soup.find_all(web_context[i], attrs=web_attributes[i])
         for hit in hits:
