@@ -3,12 +3,15 @@ import re
 import sys
 import twitter
 import markov
+from bs4 import BeautifulSoup
 try:
     # Python 3
     from html.entities import name2codepoint as n2c
+    from urllib.request import urlopen
 except ImportError:
     # Python 2
     from htmlentitydefs import name2codepoint as n2c
+    from urllib2 import urlopen
     chr = unichr
 from local_settings import *
 
@@ -50,7 +53,24 @@ def filter_tweet(tweet):
     tweet.text = re.sub(r'\xe9', 'e', tweet.text) #take out accented e
     return tweet.text
                      
-                     
+def scrape_page(src_url, web_context, web_attributes):
+    tweets = []
+    for i in range(len(src_url)):
+        print(">>> Scraping {0}".format(src_url[i]))
+        try: 
+            page = urlopen(src_url[i])
+        except Exception:
+            import traceback
+            print(">>> Error scraping {0}:".format(src_url[i]))
+            print(traceback.format_exc())
+            continue
+        soup = BeautifulSoup(page, 'html.parser')
+        hits = soup.find_all(web_context[i], attrs=web_attributes[i])
+        for hit in hits:
+            tweet = str(hit.text).strip()
+            if len(tweet) >= 0:
+                tweets.append(tweet)
+    return(tweets)
                                                     
 def grab_tweets(api, max_id=None):
     source_tweets=[]
@@ -72,31 +92,36 @@ if __name__=="__main__":
         guess = 0
 
     if guess == 0:
+        api=connect()
+        source_tweets = []
         if STATIC_TEST==True:
             file = TEST_SOURCE
             print(">>> Generating from {0}".format(file))
             string_list = open(file).readlines()
             for item in string_list:
-                source_tweets = item.split(",")    
-        else:
-            source_tweets = []
+                source_tweets += item.split(",")
+        if SCRAPE_URL==True:
+            source_tweets += scrape_page(SRC_URL, WEB_CONTEXT, WEB_ATTRIBUTES)
+        if len(SOURCE_ACCOUNTS[0]) > 0:
+            twitter_tweets =  []
             for handle in SOURCE_ACCOUNTS:
                 user=handle
-                api=connect()
                 handle_stats = api.GetUser(screen_name=user)
                 status_count = handle_stats.statuses_count
                 max_id=None
                 if status_count<3200:
-                    my_range = (status_count/200) + 1
+                    my_range = int((status_count/200) + 1)
                 else:
                     my_range = 17
                 for x in range(my_range)[1:]:
-                    source_tweets_iter, max_id = grab_tweets(api,max_id)
-                    source_tweets += source_tweets_iter
-                print("{0} tweets found in {1}".format(len(source_tweets), handle))
-                if len(source_tweets) == 0:
+                    twitter_tweets_iter, max_id = grab_tweets(api,max_id)
+                    twitter_tweets += twitter_tweets_iter
+                print("{0} tweets found in {1}".format(len(twitter_tweets), handle))
+                if len(twitter_tweets) == 0:
                     print("Error fetching tweets from Twitter. Aborting.")
                     sys.exit()
+                else:
+                    source_tweets += twitter_tweets
         mine = markov.MarkovChainer(order)
         for tweet in source_tweets:
             if re.search('([\.\!\?\"\']$)', tweet):

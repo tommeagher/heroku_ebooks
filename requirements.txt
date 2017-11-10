@@ -1,1 +1,2 @@
 python-twitter
+beautifulsoup4
