@@ -69,7 +69,7 @@ class MarkovChainer(object):
             sentence = ""
             for word in new_res:
                 sentence += word + " "
-            sentence += res[-2] + " " + res[-1]
+            sentence += res[-2] + ("" if res[-1] in ".!?;:" else " ") + res[-1]
 
         else:
             sentence = None

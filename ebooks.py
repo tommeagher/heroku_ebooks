@@ -45,13 +45,13 @@ def entity(text):
 def filter_tweet(tweet):
     tweet.text = re.sub(r'\b(RT|MT) .+', '', tweet.text)  # take out anything after RT or MT
     tweet.text = re.sub(r'(\#|@|(h\/t)|(http))\S+', '', tweet.text)  # Take out URLs, hashtags, hts, etc.
-    tweet.text = tweet.text.replace('\n', '')  # take out new lines.
+    tweet.text = re.sub('\s+', ' ', tweet.text)  # collaspse consecutive whitespace to single spaces.
     tweet.text = re.sub(r'\"|\(|\)', '', tweet.text)  # take out quotes.
     tweet.text = re.sub(r'\s+\(?(via|says)\s@\w+\)?', '', tweet.text)  # remove attribution
     htmlsents = re.findall(r'&\w+;', tweet.text)
     for item in htmlsents:
         tweet.text = tweet.text.replace(item, entity(item))
-    tweet.text = tweet.text.replace('\xe9', 'e')  # take out accented e
+    tweet.text = re.sub(r'\xe9', 'e', tweet.text)  # take out accented e
     return tweet.text
 
 
@@ -72,10 +72,21 @@ def scrape_page(src_url, web_context, web_attributes):
                 continue
             soup = BeautifulSoup(page, 'html.parser')
         hits = soup.find_all(web_context[i], attrs=web_attributes[i])
-        for hit in hits:
-            tweet = str(hit.text).strip()
-            if tweet:
-                tweets.append(tweet)
+        if not hits:
+            print(">>> No results found!")
+            continue
+        else:
+            errors = 0
+            for hit in hits:
+                try:
+                    tweet = str(hit.text).strip()
+                except (UnicodeEncodeError, UnicodeDecodeError):
+                    errors += 1
+                    continue
+                if tweet:
+                    tweets.append(tweet)
+            if errors > 0:
+                print(">>> We had trouble reading {} result{}.".format(errors, "s" if errors > 1 else ""))
     return(tweets)
 
 
@@ -112,7 +123,7 @@ if __name__ == "__main__":
                 source_tweets += item.split(",")
         if SCRAPE_URL:
             source_tweets += scrape_page(SRC_URL, WEB_CONTEXT, WEB_ATTRIBUTES)
-        if len(SOURCE_ACCOUNTS[0]) > 0:
+        if SOURCE_ACCOUNTS and len(SOURCE_ACCOUNTS[0]) > 0:
             twitter_tweets = []
             for handle in SOURCE_ACCOUNTS:
                 user = handle
