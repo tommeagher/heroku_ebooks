@@ -44,8 +44,6 @@ The ORDER variable represents the Markov index, which is a measure of associativ
 
 This bot was originally designed to pull tweets from a Twitter account, however, it can also process comma-separated text in a text file, or scrape content from the web.
 
-If you wish to use _only_ a textfile or a web resource, make sure that `SOURCE_ACCOUNTS` in your `local_settings.py` file is exactly `[""]`.
-
 #### Static Text
 To use a local text file, set `STATIC_TEST = True` and specify the name of a text file containing comma-separated "tweets" as `TEST_SOURCE`.
 
