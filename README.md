@@ -23,7 +23,7 @@ This is a basic Python port of [@harrisj's](https://twitter.com/harrisj) [iron_e
 
 ## Configuring
 
-There are several parameters that control the behavior of the bot. You can adjust them by setting them in your `local_settings.py` file. 
+There are several parameters that control the behavior of the bot. You can adjust them by setting them in your `local_settings.py` file.
 
 ```
 ODDS = 8
@@ -40,6 +40,24 @@ ORDER = 2
 
 The ORDER variable represents the Markov index, which is a measure of associativity in the generated Markov chains. 2 is generally more incoherent and 3 or 4 is more lucid. I tend to stick with 2.
 
+### Additional sources
+
+This bot was originally designed to pull tweets from a Twitter account, however, it can also process comma-separated text in a text file, or scrape content from the web.
+
+If you wish to use _only_ a textfile or a web resource, make sure that `SOURCE_ACCOUNTS` in your `local_settings.py` file is exactly `[""]`.
+
+#### Static Text
+To use a local text file, set `STATIC_TEST = True` and specify the name of a text file containing comma-separated "tweets" as `TEST_SOURCE`.
+
+#### Web Content
+To scrape content from the web, set `SCRAPE_URL` to `True`. This bot makes use of the [`find_all()` method](https://www.crummy.com/software/BeautifulSoup/bs4/doc/#find-all) of Python's BeautfulSoup library. The implementation of this method requires the definition of three inputs in `local_settings.py`.
+
+1. A list of URLs to scrape as `SRC_URL`.
+2. A list, `WEB_CONTEXT`, of the [names](https://www.crummy.com/software/BeautifulSoup/bs4/doc/#id11) of the elements to extract from the corresponding URL. This can be "div", "h1" for level-one headings, "a" for links, etc. If you wish to search for more than one name for a single page, repeat the URL in the `SRC_URL` list for as many names as you wish to extract.
+3. A list, `WEB_ATTRIBUTES` of dictionaries containing [attributes](https://www.crummy.com/software/BeautifulSoup/bs4/doc/#attrs) to filter by. For instance, to limit the search to divs of class "title", one would pass the directory: `{"class": "title"}`. Use an empty dictionary, `{}`, for any page and name for which you don't wish to specify attributes.
+
+__Note:__ Web scraping is experimental and may give you unexpected results. Make sure to test the bot in debugging mode before publishing.
+
 ## Debugging
 
 If you want to test the script or to debug the tweet generation, you can skip the random number generation and not publish the resulting tweets to Twitter.
@@ -47,7 +65,7 @@ If you want to test the script or to debug the tweet generation, you can skip th
 First, adjust the `DEBUG` variable in `local_settings.py`.
 
 ```
-DEBUG = True 
+DEBUG = True
 ```
 
 After that, commit the change and `git push heroku master`. Then run the command `heroku run worker` on the command line and watch what happens.
