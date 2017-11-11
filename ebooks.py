@@ -65,6 +65,7 @@ def scrape_page(src_url, web_context, web_attributes):
             try:
                 page = urlopen(src_url[i])
             except Exception:
+                last_url = "ERROR"
                 import traceback
                 print(">>> Error scraping {0}:".format(src_url[i]))
                 print(traceback.format_exc())
