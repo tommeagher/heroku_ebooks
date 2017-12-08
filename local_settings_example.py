@@ -3,12 +3,18 @@ Local Settings for a heroku_ebooks account. #fill in the name of the account you
 '''
 
 # Configuration
+ENABLE_TWITTER = True # Fetch twitter statuses as source and tweet result
+ENABLE_MASTODON = False # Fetch mastodon statuses as a source and toot result.
+MASTODON_API_BASE_URL = "" # an instance url like https://botsin.space
 MY_CONSUMER_KEY = 'Your Twitter API Consumer Key'
 MY_CONSUMER_SECRET = 'Your Consumer Secret Key'
 MY_ACCESS_TOKEN_KEY = 'Your Twitter API Access Token Key'
 MY_ACCESS_TOKEN_SECRET = 'Your Access Token Secret'
+CLIENT_CRED_FILENAME = '' # the MASTODON client secret file you created for this project
+USER_ACCESS_FILENAME = '' # The MASTODON user credential file you created at installation.
 
-SOURCE_ACCOUNTS = [""]  # A list of comma-separated, quote-enclosed Twitter handles of account that you'll generate tweets based on. It should look like ["account1", "account2"]. If you want just one account, no comma needed.
+TWITTER_SOURCE_ACCOUNTS = [""]  # A list of comma-separated, quote-enclosed Twitter handles of account that you'll generate tweets based on. It should look like ["account1", "account2"]. If you want just one account, no comma needed.
+MASTODON_SOURCE_ACCOUNTS = [""] # A list, e.g. ["@user@instance.tld"]
 ODDS = 8  # How often do you want this to run? 1/8 times?
 ORDER = 2  # How closely do you want this to hew to sensical? 2 is low and 4 is high.
 SOURCE_EXCLUDE = r'^$'  # Source tweets that match this regexp will not be added to the Markov chain. You might want to filter out inappropriate words for example.
