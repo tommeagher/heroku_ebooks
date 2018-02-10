@@ -3,7 +3,6 @@ Local Settings for a heroku_ebooks account.
 '''
 
 # Configuration for Twitter API
-
 ENABLE_TWITTER = True # Fetch twitter statuses as source and tweet result
 MY_CONSUMER_KEY = 'Your Twitter API Consumer Key'
 MY_CONSUMER_SECRET = 'Your Consumer Secret Key'
