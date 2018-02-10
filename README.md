@@ -86,7 +86,7 @@ You only need to do this once!
 Then, create a user credential file. NOTE: Your bot has to follow your source account.
 
 ```python
->>> mastodon = Mastodon(client_id=YOUR_FILENAME_HERE, api_base_url='YOUR INSTANCE URL')
+>>> mastodon = Mastodon(client_id='YOUR_FILENAME_HERE', api_base_url='YOUR INSTANCE URL')
 >>> mastodon.log_in('yourawesomeemail@whatever.com','incrediblygoodpassword',to_file='YOUR USER FILENAME HERE')
 ```
 
