@@ -93,15 +93,17 @@ def scrape_page(src_url, web_context, web_attributes):
 def grab_tweets(api, max_id=None):
     source_tweets = []
     user_tweets = api.GetUserTimeline(screen_name=user, count=200, max_id=max_id, include_rts=True, trim_user=True, exclude_replies=True)
-    max_id = user_tweets[-1].id - 1
-    for tweet in user_tweets:
-        tweet.text = filter_tweet(tweet)
-        if re.search(SOURCE_EXCLUDE, tweet.text):
-            continue
-        if tweet.text:
-            source_tweets.append(tweet.text)
+    if user_tweets:
+        max_id = user_tweets[-1].id - 1
+        for tweet in user_tweets:
+            tweet.text = filter_tweet(tweet)
+            if re.search(SOURCE_EXCLUDE, tweet.text):
+                continue
+            if tweet.text:
+                source_tweets.append(tweet.text)
+    else:
+        pass
     return source_tweets, max_id
-
 
 if __name__ == "__main__":
     order = ORDER
