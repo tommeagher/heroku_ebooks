@@ -39,6 +39,8 @@ def entity(text):
             pass
     else:
         guess = text[1:-1]
+        if guess == "apos":
+            guess = "lsquo"
         numero = n2c[guess]
         try:
             text = chr(numero)
@@ -53,7 +55,7 @@ def filter_status(text):
     text = re.sub('\s+', ' ', text)  # collaspse consecutive whitespace to single spaces.
     text = re.sub(r'\"|\(|\)', '', text)  # take out quotes.
     text = re.sub(r'\s+\(?(via|says)\s@\w+\)?', '', text)  # remove attribution
-    text = re.sub('<^<]+?>','', text) #strip out html tags from mastodon posts
+    text = re.sub(r'<[^>]*>','', text) #strip out html tags from mastodon posts
     htmlsents = re.findall(r'&\w+;', text)
     for item in htmlsents:
         text = text.replace(item, entity(item))
@@ -99,13 +101,16 @@ def scrape_page(src_url, web_context, web_attributes):
 def grab_tweets(api, max_id=None):
     source_tweets = []
     user_tweets = api.GetUserTimeline(screen_name=user, count=200, max_id=max_id, include_rts=True, trim_user=True, exclude_replies=True)
-    max_id = user_tweets[-1].id - 1
-    for tweet in user_tweets:
-        tweet.text = filter_status(tweet.text)
-        if re.search(SOURCE_EXCLUDE, tweet.text):
-            continue
-        if tweet.text:
-            source_tweets.append(tweet.text)
+    if user_tweets:
+        max_id = user_tweets[-1].id - 1
+        for tweet in user_tweets:
+            tweet.text = filter_status(tweet.text)
+            if re.search(SOURCE_EXCLUDE, tweet.text):
+                continue
+            if tweet.text:
+                source_tweets.append(tweet.text)
+    else:
+        pass
     return source_tweets, max_id
 
 def grab_toots(api, account_id=None,max_id=None):
@@ -121,7 +126,6 @@ def grab_toots(api, account_id=None,max_id=None):
                 if len(toot['content']) != 0:
                     source_toots.append(toot['content'])
         return source_toots, max_id
-
 
 if __name__ == "__main__":
     order = ORDER
@@ -160,31 +164,32 @@ if __name__ == "__main__":
                     sys.exit()
                 else:
                     source_statuses += twitter_tweets
-            if ENABLE_MASTODON and len(MASTODON_SOURCE_ACCOUNTS) > 0:
-                source_toots = []
-                mastoapi = connect(type='mastodon')
-                for handle in MASTODON_SOURCE_ACCOUNTS:
-                    accounts = mastoapi.account_search(handle)
-                    if len(accounts) != 1:
-                        pass # Ambiguous search
+        if ENABLE_MASTODON and len(MASTODON_SOURCE_ACCOUNTS) > 0:
+            source_toots = []
+            mastoapi = connect(type='mastodon')
+            max_id=None
+            for handle in MASTODON_SOURCE_ACCOUNTS:
+                accounts = mastoapi.account_search(handle)
+                if len(accounts) != 1:
+                    pass # Ambiguous search
+                else:
+                    account_id = accounts[0]['id']
+                    num_toots = accounts[0]['statuses_count']
+                    if num_toots < 3200:
+                        my_range = int((num_toots/200)+1)
                     else:
-                        account_id = accounts[0]['id']
-                        num_toots = accounts[0]['statuses_count']
-                        if num_toots < 3200:
-                            my_range = int((num_toots/200)+1)
-                        else:
-                            my_range = 17
-                        for x in range(my_range)[1:]:
-                            source_toots_iter, max_id = grab_toots(mastoapi,account_id, max_id=max_id)
-                            source_toots += source_toots_iter
-                        print("{0} toots found from {1}".format(len(source_toots), handle))
-                        if len(source_toots) == 0:
-                            print("Error fetching toots for %s. Aborting." % handle)
-                            sys.exit()
-                source_statuses += source_toots
-            if len(source_statuses) == 0:
-                print("No statuses found!")
-                sys.exit()
+                        my_range = 17
+                    for x in range(my_range)[1:]:
+                        source_toots_iter, max_id = grab_toots(mastoapi,account_id, max_id=max_id)
+                        source_toots += source_toots_iter
+                    print("{0} toots found from {1}".format(len(source_toots), handle))
+                    if len(source_toots) == 0:
+                        print("Error fetching toots for %s. Aborting." % handle)
+                        sys.exit()
+            source_statuses += source_toots
+        if len(source_statuses) == 0:
+            print("No statuses found!")
+            sys.exit()
         mine = markov.MarkovChainer(order)
         for status in source_statuses:
             if not re.search('([\.\!\?\"\']$)', status):
