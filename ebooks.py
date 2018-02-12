@@ -147,7 +147,7 @@ if __name__ == "__main__":
                 source_statuses += item.split(",")
         if SCRAPE_URL:
             source_statuses += scrape_page(SRC_URL, WEB_CONTEXT, WEB_ATTRIBUTES)
-        if ENABLE_TWITTER and TWITTER_SOURCE_ACCOUNTS and len(TWITTER_SOURCE_ACCOUNTS[0]) > 0:
+        if ENABLE_TWITTER_SOURCES and TWITTER_SOURCE_ACCOUNTS and len(TWITTER_SOURCE_ACCOUNTS[0]) > 0:
             twitter_tweets = []
             for handle in TWITTER_SOURCE_ACCOUNTS:
                 user = handle
@@ -164,7 +164,7 @@ if __name__ == "__main__":
                     sys.exit()
                 else:
                     source_statuses += twitter_tweets
-        if ENABLE_MASTODON and len(MASTODON_SOURCE_ACCOUNTS) > 0:
+        if ENABLE_MASTODON_SOURCES and len(MASTODON_SOURCE_ACCOUNTS) > 0:
             source_toots = []
             mastoapi = connect(type='mastodon')
             max_id=None
@@ -229,9 +229,9 @@ if __name__ == "__main__":
                     sys.exit()
 
             if not DEBUG:
-                if ENABLE_TWITTER:
+                if ENABLE_TWITTER_POSTING:
                     status = api.PostUpdate(ebook_status)
-                if ENABLE_MASTODON:
+                if ENABLE_MASTODON_POSTING:
                     status = mastoapi.toot(ebook_status)
             print(ebook_status)
 

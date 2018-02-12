@@ -3,14 +3,16 @@ Local Settings for a heroku_ebooks account.
 '''
 
 # Configuration for Twitter API
-ENABLE_TWITTER = True # Fetch twitter statuses as source and tweet result
+ENABLE_TWITTER_SOURCES = True # Fetch twitter statuses as source
+ENABLE_TWITTER_POSTING = True # Tweet resulting status?
 MY_CONSUMER_KEY = 'Your Twitter API Consumer Key'
 MY_CONSUMER_SECRET = 'Your Consumer Secret Key'
 MY_ACCESS_TOKEN_KEY = 'Your Twitter API Access Token Key'
 MY_ACCESS_TOKEN_SECRET = 'Your Access Token Secret'
 
 # Configuration for Mastodon API
-ENABLE_MASTODON = False # Fetch mastodon statuses as a source and toot result.
+ENABLE_MASTODON_SOURCES = False # Fetch mastodon statuses as a source?
+ENABLE_MASTODON_POSTING = False # Toot resulting status?
 MASTODON_API_BASE_URL = "" # an instance url like https://botsin.space
 CLIENT_CRED_FILENAME = '' # the MASTODON client secret file you created for this project
 USER_ACCESS_FILENAME = '' # The MASTODON user credential file you created at installation.
