@@ -7,20 +7,22 @@ This project should work in the latest releases of Python 2.7 and Python 3. By d
 ## Setup
 
 1. Clone this repo
-2. Create a Twitter account that you will post to.
-3. Sign into https://dev.twitter.com/apps with the same login and create an application. Make sure that your application has read and write permissions to make POST requests.
-4. Make a copy of the `local_settings_example.py` file and name it `local_settings.py`
-5. Take the consumer key (and secret) and access token (and secret) from your Twiter application and paste them into the appropriate spots in `local_settings.py`.
+2. Make a copy of the `local_settings_example.py` file and name it `local_settings.py`
+3. If posting to Twitter, create a Twitter account that you will post to.
+4. Sign into https://dev.twitter.com/apps with the same login and create an application. Make sure that your application has read and write permissions to make POST requests.
+5. Set `ENABLE_TWITTER` to `True`. Take the consumer key (and secret) and access token (and secret) from your Twiter application and paste them into the appropriate spots in `local_settings.py`.
 6. In `local_settings.py`, be sure to add the handle of the Twitter user you want your _ebooks account to be based on. To make your tweets go live, change the `DEBUG` variable to `False`.
-7. Create an account at Heroku, if you don't already have one. [Install the Heroku toolbelt](https://devcenter.heroku.com/articles/quickstart#step-2-install-the-heroku-toolbelt) and set your Heroku login on the command line.
-8. Type the command `heroku create` to generate the _ebooks Python app on the platform that you can schedule.
-9. The only Python requirement for this script is [python-twitter](https://github.com/bear/python-twitter), the `pip install` of which is handled by Heroku automatically.
-9. `git commit -am 'updated the local_settings.py'`
-10. `git push heroku master`
-11. Test your upload by typing `heroku run worker`. You should either get a response that says "3, no, sorry, not this time" or a message with the body of your post. If you get the latter, check your _ebooks Twitter account to see if it worked.
-12. Now it's time to configure the scheduler. `heroku addons:create scheduler:standard`
-13. Once that runs, type `heroku addons:open scheduler`. This will open up a browser window where you can adjust the time interval for the script to run. The scheduled command should be `python ebooks.py`. I recommend setting it at one hour.
-14. Sit back and enjoy the fruits of your labor.
+7. If you also want to include Mastodon as a source set `ENABLE_MASTODON` to `True` and you'll need to create a Mastodon account to send to on an instance like [botsin.space](https://botsin.space).
+8. After creating the Mastodon account, open a python prompt in your project directory and follow the [directions below](#mastodon-setup). Update your `local_settings.py` file with the filenames of the generated client secret and user credential secret files.
+9. Create an account at Heroku, if you don't already have one. [Install the Heroku toolbelt](https://devcenter.heroku.com/articles/quickstart#step-2-install-the-heroku-toolbelt) and set your Heroku login on the command line.
+10. Type the command `heroku create` to generate the _ebooks Python app on the platform that you can schedule.
+11. The only Python requirements for this script are [python-twitter](https://github.com/bear/python-twitter), Mastodon.py, and BeautfulSoup; the `pip install` of which is handled by Heroku automatically.
+12. `git commit -am 'updated the local_settings.py'`
+13. `git push heroku master`
+14. Test your upload by typing `heroku run worker`. You should either get a response that says "3, no, sorry, not this time" or a message with the body of your post. If you get the latter, check your _ebooks Twitter account to see if it worked.
+15. Now it's time to configure the scheduler. `heroku addons:create scheduler:standard`
+16. Once that runs, type `heroku addons:open scheduler`. This will open up a browser window where you can adjust the time interval for the script to run. The scheduled command should be `python ebooks.py`. I recommend setting it at one hour.
+17. Sit back and enjoy the fruits of your labor.
 
 
 ## Configuring
@@ -72,6 +74,23 @@ After that, commit the change and `git push heroku master`. Then run the command
 
 If you want to avoid hitting the Twitter API and instead want to use a static text file, you can do that. First, create a text file containing a Python list of quote-wrapped tweets. Then set the `STATIC_TEST` variable to `True`. Finally, specify the name of text file using the `TEST_SOURCE` variable in `local_settings.py`
 
+## Mastodon Setup
+
+You only need to do this once!
+
+```python
+>>> from mastodon import Mastodon
+>>> Mastodon.create_app('pytooterapp', api_base_url='YOUR INSTANCE URL', to_file='YOUR_FILENAME_HERE')
+```
+
+Then, create a user credential file. NOTE: Your bot has to follow your source account.
+
+```python
+>>> mastodon = Mastodon(client_id='YOUR_FILENAME_HERE', api_base_url='YOUR INSTANCE URL')
+>>> mastodon.log_in('yourawesomeemail@whatever.com','incrediblygoodpassword',to_file='YOUR USER FILENAME HERE')
+```
+
+Commit those two files to your repository and you can toot away.
 
 ## Credit
 As I said, this is based almost entirely on [@harrisj's](https://twitter.com/harrisj) [iron_ebooks](https://github.com/harrisj/iron_ebooks/). He created it in Ruby, and I wanted to port it to Python. All the credit goes to him. As a result, all of the blame for clunky implementation in Python fall on me.
