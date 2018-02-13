@@ -10,9 +10,9 @@ This project should work in the latest releases of Python 2.7 and Python 3. By d
 2. Make a copy of the `local_settings_example.py` file and name it `local_settings.py`
 3. If posting to Twitter, create a Twitter account that you will post to.
 4. Sign into https://dev.twitter.com/apps with the same login and create an application. Make sure that your application has read and write permissions to make POST requests.
-5. Set `ENABLE_TWITTER` to `True`. Take the consumer key (and secret) and access token (and secret) from your Twiter application and paste them into the appropriate spots in `local_settings.py`.
+5. Set `ENABLE_TWITTER_SOURCES` and `ENABLE_TWITTER_POSTING` to `True`. To also use Take the consumer key (and secret) and access token (and secret) from your Twiter application and paste them into the appropriate spots in `local_settings.py`. 
 6. In `local_settings.py`, be sure to add the handle of the Twitter user you want your _ebooks account to be based on. To make your tweets go live, change the `DEBUG` variable to `False`.
-7. If you also want to include Mastodon as a source set `ENABLE_MASTODON` to `True` and you'll need to create a Mastodon account to send to on an instance like [botsin.space](https://botsin.space).
+7. If you also want to include Mastodon as a source set `ENABLE_MASTODON_SOURCES` to `True` and you'll need to create a Mastodon account to send to on an instance like [botsin.space](https://botsin.space). If you would also like to have the bot post to this account, set `ENABLE_MASTODON_POSTING` to `True`. 
 8. After creating the Mastodon account, open a python prompt in your project directory and follow the [directions below](#mastodon-setup). Update your `local_settings.py` file with the filenames of the generated client secret and user credential secret files.
 9. Create an account at Heroku, if you don't already have one. [Install the Heroku toolbelt](https://devcenter.heroku.com/articles/quickstart#step-2-install-the-heroku-toolbelt) and set your Heroku login on the command line.
 10. Type the command `heroku create` to generate the _ebooks Python app on the platform that you can schedule.
