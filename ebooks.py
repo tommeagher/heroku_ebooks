@@ -22,7 +22,8 @@ def connect(type='twitter'):
         return twitter.Api(consumer_key=MY_CONSUMER_KEY,
                        consumer_secret=MY_CONSUMER_SECRET,
                        access_token_key=MY_ACCESS_TOKEN_KEY,
-                       access_token_secret=MY_ACCESS_TOKEN_SECRET)
+                       access_token_secret=MY_ACCESS_TOKEN_SECRET,
+                       tweet_mode='extended')
     elif type == 'mastodon':
         return Mastodon(client_id=CLIENT_CRED_FILENAME, api_base_url=MASTODON_API_BASE_URL, access_token=USER_ACCESS_FILENAME)
     return None
@@ -102,9 +103,12 @@ def grab_tweets(api, max_id=None):
     source_tweets = []
     user_tweets = api.GetUserTimeline(screen_name=user, count=200, max_id=max_id, include_rts=True, trim_user=True, exclude_replies=True)
     if user_tweets:
-        max_id = user_tweets[-1].id - 1
+        max_id = user_tweets[-1].id - 
         for tweet in user_tweets:
-            tweet.text = filter_status(tweet.text)
+            if tweet.full_text:
+                tweet.text = filter_status(tweet.full_text)
+            else:
+                tweet.text = filter_status(tweet.full_text)
             if re.search(SOURCE_EXCLUDE, tweet.text):
                 continue
             if tweet.text:
