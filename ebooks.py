@@ -103,7 +103,7 @@ def grab_tweets(api, max_id=None):
     source_tweets = []
     user_tweets = api.GetUserTimeline(screen_name=user, count=200, max_id=max_id, include_rts=True, trim_user=True, exclude_replies=True)
     if user_tweets:
-        max_id = user_tweets[-1].id - 
+        max_id = user_tweets[-1].id - 1
         for tweet in user_tweets:
             if tweet.full_text:
                 tweet.text = filter_status(tweet.full_text)
