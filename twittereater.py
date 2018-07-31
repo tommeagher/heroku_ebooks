@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*-
 import csv
 from local_settings import TWITTER_ARCHIVE_NAME, TEST_SOURCE, IGNORE_RETWEETS
 
-f = open(TWITTER_ARCHIVE_NAME, 'r', encoding='utf-8')
+f = open(TWITTER_ARCHIVE_NAME, 'r')
 tweets = []
 reader = csv.reader(f,quotechar='"')
 next(reader) #get rid of the twitter header
