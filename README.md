@@ -60,6 +60,18 @@ To scrape content from the web, set `SCRAPE_URL` to `True`. This bot makes use o
 
 __Note:__ Web scraping is experimental and may give you unexpected results. Make sure to test the bot in debugging mode before publishing.
 
+#### Twitter archive
+To use tweets from a Twitter account you have access to, you can download your Twitter Archive by following the steps from [Twitter's Help Center](https://help.twitter.com/en/managing-your-account/how-to-download-your-twitter-archive).
+
+1. Request your Twitter archive
+2. Extract the CSV file and ensure it is named the same as the `TWITTER_ARCHIVE_NAME` in `local_settings.py`
+3. In `local_settings.py`, retweets are ignored by default. If you want to include retweets in your corpus, change `IGNORE_RETWEETS` to `False`.
+4. Update `TEST_SOURCE` and specify the name of the parsed Twitter archive
+5. Once that is all set, run `twittereater.py` and it will automatically create a corpus file based on the `TEST_SOURCE` variable in `local_settings.py`
+
+If you want to use the Twitter corpus to generate tweets, set `STATIC_TEST = True`
+
+
 ## Debugging
 
 If you want to test the script or to debug the tweet generation, you can skip the random number generation and not publish the resulting tweets to Twitter.
