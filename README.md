@@ -7,23 +7,29 @@ This project should work in the latest releases of Python 2.7 and Python 3. By d
 ## Setup
 
 1. Clone this repo
-2. Make a copy of the `local_settings_example.py` file and name it `local_settings.py`
-3. If posting to Twitter, create a Twitter account that you will post to.
-4. Sign into https://dev.twitter.com/apps with the same login and create an application. Make sure that your application has read and write permissions to make POST requests.
-5. Set `ENABLE_TWITTER_SOURCES` and `ENABLE_TWITTER_POSTING` to `True`. To also use Take the consumer key (and secret) and access token (and secret) from your Twiter application and paste them into the appropriate spots in `local_settings.py`. 
-6. In `local_settings.py`, be sure to add the handle of the Twitter user you want your _ebooks account to be based on. To make your tweets go live, change the `DEBUG` variable to `False`.
-7. If you also want to include Mastodon as a source set `ENABLE_MASTODON_SOURCES` to `True` and you'll need to create a Mastodon account to send to on an instance like [botsin.space](https://botsin.space). If you would also like to have the bot post to this account, set `ENABLE_MASTODON_POSTING` to `True`. 
-8. After creating the Mastodon account, open a python prompt in your project directory and follow the [directions below](#mastodon-setup). Update your `local_settings.py` file with the filenames of the generated client secret and user credential secret files.
-9. Create an account at Heroku, if you don't already have one. [Install the Heroku toolbelt](https://devcenter.heroku.com/articles/quickstart#step-2-install-the-heroku-toolbelt) and set your Heroku login on the command line.
-10. Type the command `heroku create` to generate the _ebooks Python app on the platform that you can schedule.
-11. The only Python requirements for this script are [python-twitter](https://github.com/bear/python-twitter), Mastodon.py, and BeautfulSoup; the `pip install` of which is handled by Heroku automatically.
-12. `git commit -am 'updated the local_settings.py'`
-13. `git push heroku master`
-14. Test your upload by typing `heroku run worker`. You should either get a response that says "3, no, sorry, not this time" or a message with the body of your post. If you get the latter, check your _ebooks Twitter account to see if it worked.
+2. If posting to Twitter, create a Twitter account that you will post to.
+3. Sign into https://dev.twitter.com/apps with the same login and create an application. Make sure that your application has read and write permissions to make POST requests.
+4. Set `ENABLE_TWITTER_SOURCES` and `ENABLE_TWITTER_POSTING` to `True`.  
+5. In `local_settings.py`, be sure to add the handle of the Twitter user you want your _ebooks account to be based on. To make your tweets go live, change the `DEBUG` variable to `False`.
+6. If you also want to include Mastodon as a source set `ENABLE_MASTODON_SOURCES` to `True` and you'll need to create a Mastodon account to send to on an instance like [botsin.space](https://botsin.space). If you would also like to have the bot post to this account, set `ENABLE_MASTODON_POSTING` to `True`. 
+7. After creating the Mastodon account, open a python prompt in your project directory and follow the [directions below](#mastodon-setup). Update your `local_settings.py` file with the filenames of the generated client secret and user credential secret files.
+8. Create an account at Heroku, if you don't already have one. [Install the Heroku toolbelt](https://devcenter.heroku.com/articles/quickstart#step-2-install-the-heroku-toolbelt) and set your Heroku login on the command line.
+9. Type the command `heroku create` to generate the _ebooks Python app on the platform that you can schedule.
+10. The only Python requirements for this script are [python-twitter](https://github.com/bear/python-twitter), Mastodon.py, and BeautfulSoup; the `pip install` of which is handled by Heroku automatically.
+11. `git commit -am 'updated the local_settings.py'`
+12. `git push heroku master`
+13. Before Heroku will properly run your scripts, it will need to have the application keys you created in step 4. We'll configure these as environment variables in Heroku, which will not appear anywhere else in your code (or on Github). Have the consumer key (and secret) and access token (and secret) from your Twiter application ready. At the command line where you just pushed your code to Heroku, type: 
+```
+heroku config:set TWITTER_CONSUMER_KEY=enter_your_consumer_key_here
+heroku config:set TWITTER_CONSUMER_SECRET=enter_your_consumer_secret_here
+heroku config:set TWITTER_ACCESS_TOKEN_KEY=enter_your_access_token_here
+heroku config:set TWITTER_ACCESS_SECRET=enter_your_access_secret_here
+```
+Substitute your actual keys after the = sign. Don't include any spaces, and you don't need to wrap them in quotes. To ensure they all got entered correctly, type `heroku config` to see all the environment variables stored for your app. If you see all four keys in there, you're good to go.
+14. Now, test your upload by typing `heroku run worker`. You should either get a response that says "3, no, sorry, not this time" or a message with the body of your post. If you get the latter, check your _ebooks Twitter account to see if it worked.
 15. Now it's time to configure the scheduler. `heroku addons:create scheduler:standard`
 16. Once that runs, type `heroku addons:open scheduler`. This will open up a browser window where you can adjust the time interval for the script to run. The scheduled command should be `python ebooks.py`. I recommend setting it at one hour.
 17. Sit back and enjoy the fruits of your labor.
-
 
 ## Configuring
 
@@ -105,6 +111,6 @@ Then, create a user credential file. NOTE: Your bot has to follow your source ac
 Commit those two files to your repository and you can toot away.
 
 ## Credit
-As I said, this is based almost entirely on [@harrisj's](https://twitter.com/harrisj) [iron_ebooks](https://github.com/harrisj/iron_ebooks/). He created it in Ruby, and I wanted to port it to Python. All the credit goes to him. As a result, all of the blame for clunky implementation in Python fall on me.
+This is based almost entirely on [@harrisj's](https://twitter.com/harrisj) [iron_ebooks](https://github.com/harrisj/iron_ebooks/). He created it in Ruby, and I wanted to port it to Python. All the credit goes to him. As a result, all of the blame for clunky implementation in Python fall on me.
 
 Many thanks to the [many folks who have contributed](CONTRIBUTORS.md) to the development of this project since it was open sourced in 2013. If you see ways to improve the code, please fork it and send a [pull request](https://github.com/tommeagher/heroku_ebooks/pulls), or [file an issue](https://github.com/tommeagher/heroku_ebooks/issues) for me, and I'll address it.
