@@ -4,4 +4,3 @@
 __pycache__
 *.csv
 .env/
-local_settings.py
