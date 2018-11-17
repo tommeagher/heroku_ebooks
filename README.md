@@ -1,4 +1,4 @@
-#THIS FORK
+#THIS FORK from [KaleTheNoise](https://www.github.com/KaleTheNoise)
 
  This fork is the code that runs @NONSTOPTEXT
 
