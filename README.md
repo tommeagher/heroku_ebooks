@@ -2,19 +2,18 @@
 
  This fork is the code that runs @NONSTOPTEXT
 
- This fork has been modified somewhat to make setup and configuration even easier using Environmental variables set in Heroku rather than being hardcoded into the script.
+ This fork has been modified somewhat to make setup and configuration even easier using Environmental variables set in Heroku rather than being hardcoded into the script. 
  
- 11/17/18 - Works using Environemental Variables in Heroku to control the Tweet Account, Odds, and Order.
+ Note that with this version you can only use a single account as the source to pull tweets from.
  
- #TODO:
- 
- -Use environmental variables for:
- 
-  -Source Account
-  
-  -Set Debug
-  
-  -Set Ignore Retweets
+ 11/17/18 - Works using Environmental Variables in Heroku to control the Tweet Account, Source Account, Odds, and Order.
+
+```
+heroku config:set TWEET_ACCOUNT=account_to_tweet_to
+heroku config:set TWEET_SOURCE_ACC=source_account_name
+heroku config:set TWEET_ODDS=8
+heroku config:set TWEET_ORDER=2
+```
   
 # Heroku_ebooks
 
@@ -28,7 +27,7 @@ This project should work in the latest releases of Python 2.7 and Python 3. By d
 2. If posting to Twitter, create a Twitter account that you will post to.
 3. Sign into https://dev.twitter.com/apps with the same login and create an application. Make sure that your application has read and write permissions to make POST requests.
 4. Set `ENABLE_TWITTER_SOURCES` and `ENABLE_TWITTER_POSTING` to `True`.  
-5. In `local_settings.py`, be sure to add the handle of the Twitter user you want your _ebooks account to be based on. To make your tweets go live, change the `DEBUG` variable to `False`.
+5. Set an environmental variable in Heroku to be the source account with heroku config:Set TWEET_SOURCE_ACC=source_account_name To make your tweets go live, change the `DEBUG` variable to `False`.
 6. If you also want to include Mastodon as a source set `ENABLE_MASTODON_SOURCES` to `True` and you'll need to create a Mastodon account to send to on an instance like [botsin.space](https://botsin.space). If you would also like to have the bot post to this account, set `ENABLE_MASTODON_POSTING` to `True`. 
 7. After creating the Mastodon account, open a python prompt in your project directory and follow the [directions below](#mastodon-setup). Update your `local_settings.py` file with the filenames of the generated client secret and user credential secret files.
 8. Create an account at Heroku, if you don't already have one. [Install the Heroku toolbelt](https://devcenter.heroku.com/articles/quickstart#step-2-install-the-heroku-toolbelt) and set your Heroku login on the command line.
@@ -51,10 +50,10 @@ Substitute your actual keys after the = sign. Don't include any spaces, and you 
 
 ## Configuring
 
-There are several parameters that control the behavior of the bot. You can adjust them by setting them in your `local_settings.py` file.
+There are several parameters that control the behavior of the bot. You can adjust them by setting heroku environmental variables.
 
 ```
-ODDS = 8
+heroku config:set TWEET_ODDS = 8
 ```
 
 The bot does not run on every invocation. It runs in a pseudorandom fashion. At the beginning of each time the script fires, `guess = random.choice(range(ODDS))`. If `guess == 0`, then it proceeds. If your `ODDS = 8`, it should run one out of every 8 times, more or less. You can override it to make it more or less frequent. To make it run every time, you can set it to 0.
@@ -63,7 +62,7 @@ The bot does not run on every invocation. It runs in a pseudorandom fashion. At 
 By default, the bot ignores any tweets with URLs in them because those might just be headlines for articles and not text you've written.
 
 ```
-ORDER = 2
+heroku config:set TWEET_ORDER = 2
 ```
 
 The ORDER variable represents the Markov index, which is a measure of associativity in the generated Markov chains. 2 is generally more incoherent and 3 or 4 is more lucid. I tend to stick with 2.
