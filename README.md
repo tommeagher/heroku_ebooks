@@ -27,7 +27,7 @@ This project should work in the latest releases of Python 2.7 and Python 3. By d
 2. If posting to Twitter, create a Twitter account that you will post to.
 3. Sign into https://dev.twitter.com/apps with the same login and create an application. Make sure that your application has read and write permissions to make POST requests.
 4. Set `ENABLE_TWITTER_SOURCES` and `ENABLE_TWITTER_POSTING` to `True`.  
-5. Set an environmental variable in Heroku to be the source account with `heroku config:Set TWEET_SOURCE_ACC=source_account_name`To make your tweets go live, change the `DEBUG` variable to `False`.
+5. Set an environmental variable in Heroku to be the source account with `heroku config:set TWEET_SOURCE_ACC=source_account_name`To make your tweets go live, change the `DEBUG` variable to `False`.
 6. If you also want to include Mastodon as a source set `ENABLE_MASTODON_SOURCES` to `True` and you'll need to create a Mastodon account to send to on an instance like [botsin.space](https://botsin.space). If you would also like to have the bot post to this account, set `ENABLE_MASTODON_POSTING` to `True`. 
 7. After creating the Mastodon account, open a python prompt in your project directory and follow the [directions below](#mastodon-setup). Update your `local_settings.py` file with the filenames of the generated client secret and user credential secret files.
 8. Create an account at Heroku, if you don't already have one. [Install the Heroku toolbelt](https://devcenter.heroku.com/articles/quickstart#step-2-install-the-heroku-toolbelt) and set your Heroku login on the command line.
