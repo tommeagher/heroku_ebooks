@@ -1,5 +1,7 @@
 #THIS FORK
 
+ This fork is the code that runs @NONSTOPTEXT
+
  This fork has been modified somewhat to make setup and configuration even easier using Environmental variables set in Heroku rather than being hardcoded into the script.
  
  11/17/18 - Works using Environemental Variables in Heroku to control the Tweet Account, Odds, and Order.
