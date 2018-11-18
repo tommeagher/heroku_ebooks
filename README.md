@@ -4,7 +4,7 @@
 
  This fork has been modified somewhat to make setup and configuration even easier using Environmental variables set in Heroku rather than being hardcoded into the script. 
  
- Note that with this version you can only use a single account as the source to pull tweets from.
+ Note that these changes only apply to Twitter as I do not care for Mastadon.
  
  11/17/18 - Works using Environmental Variables in Heroku to control the Tweet Account, Source Account, Odds, and Order.
 
