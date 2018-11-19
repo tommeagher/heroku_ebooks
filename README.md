@@ -1,7 +1,5 @@
 #THIS FORK from [KaleTheNoise](https://www.github.com/KaleTheNoise)
 
- This fork is the code that runs @NONSTOPTEXT
-
  This fork has been modified somewhat to make setup and configuration even easier using Environmental variables set in Heroku rather than being hardcoded into the script. 
  
  Note that with this version only pulls from twitter in this fashion.
