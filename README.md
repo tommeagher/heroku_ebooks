@@ -26,6 +26,7 @@ heroku config:set TWITTER_ACCESS_TOKEN_KEY=enter_your_access_token_here
 heroku config:set TWITTER_ACCESS_SECRET=enter_your_access_secret_here
 ```
 Substitute your actual keys after the = sign. Don't include any spaces, and you don't need to wrap them in quotes. To ensure they all got entered correctly, type `heroku config` to see all the environment variables stored for your app. If you see all four keys in there, you're good to go.
+
 14. Now, test your upload by typing `heroku run worker`. You should either get a response that says "3, no, sorry, not this time" or a message with the body of your post. If you get the latter, check your _ebooks Twitter account to see if it worked.
 15. Now it's time to configure the scheduler. `heroku addons:create scheduler:standard`
 16. Once that runs, type `heroku addons:open scheduler`. This will open up a browser window where you can adjust the time interval for the script to run. The scheduled command should be `python ebooks.py`. I recommend setting it at one hour.
