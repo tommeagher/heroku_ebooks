@@ -12,3 +12,4 @@
 * [superstrong](https://github.com/superstrong)
 * [andrlik](https://github.com/andrlik)
 * [TimlChan](https://github.com/TimLChan)
+* [Kale](https://github.com/KaleTheNoise)

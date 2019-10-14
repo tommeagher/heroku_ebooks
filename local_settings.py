@@ -5,6 +5,7 @@ Local Settings for a heroku_ebooks account.
 '''
 
 # Configuration for Twitter API
+# Generate using global variables in heroku
 ENABLE_TWITTER_SOURCES = True # Fetch twitter statuses as source
 ENABLE_TWITTER_POSTING = True # Tweet resulting status?
 MY_CONSUMER_KEY = environ.get('TWITTER_CONSUMER_KEY')#Your Twitter API Consumer Key set in Heroku config
@@ -20,6 +21,7 @@ CLIENT_CRED_FILENAME = '' # the MASTODON client secret file you created for this
 USER_ACCESS_FILENAME = '' # The MASTODON user credential file you created at installation.
 
 # Sources (Twitter, Mastodon, local text file or a web page)
+#NOTE: Only twitter is controlled via heroku at this time
 TWITTER_SOURCE_ACCOUNTS = environ.get('TWEET_SOURCE_ACC').split(",")   # Creates a single entry list for use with a single source account 
 MASTODON_SOURCE_ACCOUNTS = [""] # A list, e.g. ["@user@instance.tld"]
 SOURCE_EXCLUDE = r'^$'  # Source tweets that match this regexp will not be added to the Markov chain. You might want to filter out inappropriate words for example.
