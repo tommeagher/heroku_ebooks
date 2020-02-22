@@ -13,7 +13,7 @@ MY_ACCESS_TOKEN_KEY = environ.get('TWITTER_ACCESS_TOKEN_KEY')#Your Twitter API A
 MY_ACCESS_TOKEN_SECRET = environ.get('TWITTER_ACCESS_SECRET')#Your Access Token Secret set in Heroku config
 
 # Configuration for Mastodon API
-ENABLE_MASTODON_SOURCES = True # Fetch mastodon statuses as a source?
+ENABLE_MASTODON_SOURCES = False # Fetch mastodon statuses as a source?
 ENABLE_MASTODON_POSTING = True # Toot resulting status?
 MASTODON_API_BASE_URL = "https://botsin.space" # an instance url like https://botsin.space
 CLIENT_CRED_FILENAME = 'faebot_masto' # the MASTODON client secret file you created for this project
