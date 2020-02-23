@@ -142,6 +142,7 @@ if __name__ == "__main__":
         sys.exit()
     else:
         api = connect()
+        mastoapi = connect(type='mastodon')
         source_statuses = []
         if STATIC_TEST:
             file = TEST_SOURCE
@@ -170,7 +171,6 @@ if __name__ == "__main__":
                     source_statuses += twitter_tweets
         if ENABLE_MASTODON_SOURCES and len(MASTODON_SOURCE_ACCOUNTS) > 0:
             source_toots = []
-            mastoapi = connect(type='mastodon')
             max_id=None
             for handle in MASTODON_SOURCE_ACCOUNTS:
                 accounts = mastoapi.account_search(handle)
