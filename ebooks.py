@@ -143,6 +143,7 @@ if __name__ == "__main__":
     else:
         api = connect()
         mastoapi = connect(type='mastodon')
+        
         source_statuses = []
         if STATIC_TEST:
             file = TEST_SOURCE
