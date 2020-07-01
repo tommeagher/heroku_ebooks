@@ -143,10 +143,7 @@ if __name__ == "__main__":
         sys.exit()
     else:
         api = connect()
-        
-        if ENABLE_MASTODON_SOURCES or ENABLE_MASTODON_POSTING:
-            mastoapi = connect(type='mastodon')
-        
+        mastoapi = connect(type='mastodon')
         source_statuses = []
         if STATIC_TEST:
             file = TEST_SOURCE
