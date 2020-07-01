@@ -5,6 +5,7 @@ import twitter
 from mastodon import Mastodon
 import markov
 from bs4 import BeautifulSoup
+
 try:
     # Python 3
     from html.entities import name2codepoint as n2c
@@ -142,7 +143,9 @@ if __name__ == "__main__":
         sys.exit()
     else:
         api = connect()
-        mastoapi = connect(type='mastodon')
+        
+        if ENABLE_MASTODON_SOURCES or ENABLE_MASTODON_POSTING:
+            mastoapi = connect(type='mastodon')
         
         source_statuses = []
         if STATIC_TEST:
@@ -234,6 +237,7 @@ if __name__ == "__main__":
                     sys.exit()
 
             if not DEBUG:
+                ebook_status=filter_status(ebook_status)
                 if ENABLE_TWITTER_POSTING:
                     status = api.PostUpdate(ebook_status)
                 if ENABLE_MASTODON_POSTING:
