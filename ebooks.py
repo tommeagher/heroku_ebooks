@@ -142,8 +142,9 @@ if __name__ == "__main__":
         print(str(guess) + " No, sorry, not this time.")  # message if the random number fails.
         sys.exit()
     else:
-        api = connect()
-        mastoapi = connect(type='mastodon')
+        api = connect()         
+        if ENABLE_MASTODON_SOURCES or ENABLE_MASTODON_POSTING:
+            mastoapi = connect(type='mastodon')
         source_statuses = []
         if STATIC_TEST:
             file = TEST_SOURCE
