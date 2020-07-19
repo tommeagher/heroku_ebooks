@@ -235,7 +235,6 @@ if __name__ == "__main__":
                     sys.exit()
 
             if not DEBUG:
-                ebook_status=filter_status(ebook_status)
                 if ENABLE_TWITTER_POSTING:
                     status = api.PostUpdate(ebook_status)
                 if ENABLE_MASTODON_POSTING:
