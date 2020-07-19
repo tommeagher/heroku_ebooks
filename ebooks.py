@@ -5,6 +5,7 @@ import twitter
 from mastodon import Mastodon
 import markov
 from bs4 import BeautifulSoup
+
 try:
     # Python 3
     from html.entities import name2codepoint as n2c
@@ -141,7 +142,9 @@ if __name__ == "__main__":
         print(str(guess) + " No, sorry, not this time.")  # message if the random number fails.
         sys.exit()
     else:
-        api = connect()
+        api = connect()         
+        if ENABLE_MASTODON_SOURCES or ENABLE_MASTODON_POSTING:
+            mastoapi = connect(type='mastodon')
         source_statuses = []
         if STATIC_TEST:
             file = TEST_SOURCE
@@ -170,7 +173,6 @@ if __name__ == "__main__":
                     source_statuses += twitter_tweets
         if ENABLE_MASTODON_SOURCES and len(MASTODON_SOURCE_ACCOUNTS) > 0:
             source_toots = []
-            mastoapi = connect(type='mastodon')
             max_id=None
             for handle in MASTODON_SOURCE_ACCOUNTS:
                 accounts = mastoapi.account_search(handle)

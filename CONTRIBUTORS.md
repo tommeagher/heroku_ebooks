@@ -13,3 +13,4 @@
 * [andrlik](https://github.com/andrlik)
 * [TimlChan](https://github.com/TimLChan)
 * [zaneneuschuler](https://github.com/zaneneuschuler)
+* [aislingfae](https://github.com/AislingFae)

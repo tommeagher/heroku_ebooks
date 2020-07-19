@@ -1,7 +1,7 @@
 from os import environ
 
 '''
-Local Settings for a heroku_ebooks account. 
+Local Settings for a heroku_ebooks account.
 '''
 
 # Configuration for Twitter API
