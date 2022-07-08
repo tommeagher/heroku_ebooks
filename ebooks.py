@@ -2,6 +2,7 @@ import random
 import re
 import sys
 import twitter
+import tweepy
 from mastodon import Mastodon
 import markov
 from bs4 import BeautifulSoup
@@ -20,11 +21,18 @@ from local_settings import *
 
 def connect(type='twitter'):
     if type == 'twitter':
-        return twitter.Api(consumer_key=MY_CONSUMER_KEY,
-                       consumer_secret=MY_CONSUMER_SECRET,
-                       access_token_key=MY_ACCESS_TOKEN_KEY,
-                       access_token_secret=MY_ACCESS_TOKEN_SECRET,
-                       tweet_mode='extended')
+        if TWITTER_API_VERSION == 'v2':
+            return tweepy.Client(bearer_token=MY_BEARER_TOKEN,
+                                 consumer_key=MY_CONSUMER_KEY,
+                                 consumer_secret=MY_CONSUMER_SECRET,
+                                 access_token=MY_ACCESS_TOKEN_KEY,
+                                 access_token_secret=MY_ACCESS_TOKEN_SECRET)
+        else:
+            return twitter.Api(consumer_key=MY_CONSUMER_KEY,
+                           consumer_secret=MY_CONSUMER_SECRET,
+                           access_token_key=MY_ACCESS_TOKEN_KEY,
+                           access_token_secret=MY_ACCESS_TOKEN_SECRET,
+                           tweet_mode='extended')
     elif type == 'mastodon':
         return Mastodon(client_id=CLIENT_CRED_FILENAME, api_base_url=MASTODON_API_BASE_URL, access_token=USER_ACCESS_FILENAME)
     return None
@@ -118,6 +126,18 @@ def grab_tweets(api, max_id=None):
         pass
     return source_tweets, max_id
 
+def grab_tweets_v2(api, handle):
+    twitter_tweets = []
+    id = api.get_user(username=handle).data.id
+    for tweet in tweepy.Paginator(api.get_users_tweets, id, exclude=['retweets', 'replies'],
+                                  max_results=100).flatten(limit=TWEETS_TO_GRAB):
+        tweet_text = filter_status(tweet.text)
+        if re.search(SOURCE_EXCLUDE, tweet_text):
+            continue
+        if tweet_text:
+            twitter_tweets.append(tweet_text)
+    return twitter_tweets
+
 def grab_toots(api, account_id=None,max_id=None):
     if account_id:
         source_toots = []
@@ -154,7 +174,10 @@ if __name__ == "__main__":
                 source_statuses += item.split(",")
         if SCRAPE_URL:
             source_statuses += scrape_page(SRC_URL, WEB_CONTEXT, WEB_ATTRIBUTES)
-        if ENABLE_TWITTER_SOURCES and TWITTER_SOURCE_ACCOUNTS and len(TWITTER_SOURCE_ACCOUNTS[0]) > 0:
+        if ENABLE_TWITTER_SOURCES and TWITTER_SOURCE_ACCOUNTS and len(TWITTER_SOURCE_ACCOUNTS[0]) > 0 and TWITTER_API_VERSION == 'v2':
+            for handle in TWITTER_SOURCE_ACCOUNTS:
+                source_statuses += grab_tweets_v2(api,handle)
+        elif ENABLE_TWITTER_SOURCES and TWITTER_SOURCE_ACCOUNTS and len(TWITTER_SOURCE_ACCOUNTS[0]) > 0:
             twitter_tweets = []
             for handle in TWITTER_SOURCE_ACCOUNTS:
                 user = handle
@@ -235,7 +258,9 @@ if __name__ == "__main__":
                     sys.exit()
 
             if not DEBUG:
-                if ENABLE_TWITTER_POSTING:
+                if ENABLE_TWITTER_POSTING and TWITTER_API_VERSION=='v2':
+                    status = api.create_tweet(text=ebook_status)
+                elif ENABLE_TWITTER_POSTING:
                     status = api.PostUpdate(ebook_status)
                 if ENABLE_MASTODON_POSTING:
                     status = mastoapi.toot(ebook_status)
