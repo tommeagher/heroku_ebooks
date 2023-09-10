@@ -1,8 +1,12 @@
 # Heroku_ebooks
 
-This is a basic Python port of [@harrisj's](https://twitter.com/harrisj) [iron_ebooks](https://github.com/harrisj/iron_ebooks/) Ruby script. Using Heroku's scheduler, you can post to an _ebooks Twitter account based on the corpus of an existing Twitter at pseudorandom intervals. Currently, it is the magic behind [@adriennelaf_ebx](http://www.twitter.com/adriennelaf_ebx) and [@stevebuttry_ebx](http://www.twitter.com/stevebuttry_ebx), among many, many others in the wild.
+**Given the changes to Twitter's API in the last year, as well as Heroku's price changes, the ecosystem that this app was built on has eroded significantly since it first launched more than a decade ago. I don't have the bandwidth to support development of an app that is less powerful than it used to be. I believe that this will continue to run if you want to use it for Mastodon. I'm sure with a little elbow grease someone could get it running on BlueSky as well. I'm going to archive this repo. If you'd like to take on the project, please fork it. Send me an email at hello [at] tommeagher [dot] com, and I can update the README to point people toward your new version. Thanks to all who have used and enjoyed this over the years. It was a real kick for me to see others put it to good use.**
 
-This project should work in the latest releases of Python 2.7 and Python 3. By default, in Heroku, this will be deployed to Python 3.
+**I'll leave everything else here as it was when it was an active project, for future reference.**
+
+This is a basic Python port of [@harrisj's](https://twitter.com/harrisj) [iron_ebooks](https://github.com/harrisj/iron_ebooks/) Ruby script. Using Heroku's scheduler, you can post to an _ebooks Twitter account based on the corpus of an existing Twitter at pseudorandom intervals. It was the magic behind [@adriennelaf_ebx](http://www.twitter.com/adriennelaf_ebx) and [@stevebuttry_ebx](http://www.twitter.com/stevebuttry_ebx), among many, many others in the wild.
+
+This project worked in Python 2.7 and Python 3. By default, in Heroku, it was deployed to Python 3.
 
 ## Setup
 
