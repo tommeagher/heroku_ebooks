@@ -14,3 +14,4 @@
 * [TimlChan](https://github.com/TimLChan)
 * [zaneneuschuler](https://github.com/zaneneuschuler)
 * [aislingfae](https://github.com/AislingFae)
+* [supermodelscientist](https://github.com/supermodelscientist)
